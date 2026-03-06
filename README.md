@@ -6,15 +6,35 @@ Works with Claude Code, Cursor, Gemini CLI, OpenCode, Amp, Goose, Roo Code, GitH
 
 ## Install
 
-Clone into your agent's skills directory:
+### One command
 
 ```bash
-git clone https://github.com/iii-hq/skills.git ~/.claude/skills/iii
+npx skills add iii-hq/skills
 ```
 
-Or for other agents, follow [agentskills.io](https://agentskills.io) conventions for your platform:
+### SkillKit
 
 ```bash
+# Install all iii skills
+npx skillkit install iii-hq/skills
+
+# Install a single skill
+npx skillkit install iii-rest-api
+
+# Translate to another agent format
+npx skillkit translate iii-rest-api --agent cursor
+npx skillkit translate iii-rest-api --agent gemini-cli
+
+# Sync skills across all your agents
+npx skillkit sync
+```
+
+### Git clone
+
+```bash
+# Claude Code
+git clone https://github.com/iii-hq/skills.git ~/.claude/skills/iii
+
 # Cursor
 git clone https://github.com/iii-hq/skills.git .cursor/skills/iii
 
@@ -24,6 +44,21 @@ git clone https://github.com/iii-hq/skills.git .gemini/skills/iii
 # Or symlink individual skills
 ln -s /path/to/skills/iii-rest-api ~/.claude/skills/iii-rest-api
 ```
+
+### Multi-agent sync
+
+If you use multiple agents, SkillKit keeps skills in sync across all of them:
+
+```bash
+# Install once, sync to Claude Code + Cursor + Gemini CLI
+npx skillkit install iii-hq/skills
+npx skillkit sync --agents claude-code,cursor,gemini-cli
+
+# Or translate all skills to a specific agent
+npx skillkit translate iii-hq/skills --agent cursor
+```
+
+Supports 32+ agents including Claude Code, Cursor, Codex, Gemini CLI, OpenCode, Amp, Goose, Roo Code, GitHub Copilot, and more.
 
 ## Skills
 
