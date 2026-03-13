@@ -1,0 +1,13 @@
+---
+description: 'General software engineering principles'
+alwaysApply: true
+---
+
+# General Engineering Principles
+
+- Keep functions small and focused — one responsibility each.
+- Reuse functionality, keep code DRY, prefer to leverage `registerTrigger()` on existing functions rather than writing
+  new functions when possible.
+- Write tests alongside implementation.
+- Prefer composition over inheritance.
+- Use environment variables for configuration; never hardcode secrets.

@@ -1,14 +1,10 @@
 ---
-description: 'General iii and iii project conventions that must be followed'
+description: 'iii technical conventions that must be followed'
 alwaysApply: true
 ---
 
-# Project Conventions
+# iii Technical Conventions
 
-- These are conventions, the user instructing you is the ultimate expert on what they are building. Prefer these conventions,
-  clarify with and educate the user on them as necessary, but ultimately trust the user if they overrule the conventions.
-- If the conventions are overruled and multiple attempts have been made to implement functionality not following them then
-  gently suggest to the user that they try an approach that is more in line with the convention, or offers a hybrid solution.
 - It is necessary to know iii's core primitives to properly architect software with it. They are [Functions, Triggers, and Workers](https://iii.dev/docs/primitives-and-concepts/functions-triggers-workers.mdx).
 - When adapting existing codebases to use iii the preference should be towards using the conventions of the existing project
   and its libraries to create functionality that automatically registers these existing services with iii as Workers with
@@ -21,7 +17,8 @@ alwaysApply: true
 - iii allows for any programming language to be used with it. This document uses camelCase but you should use
   the proper convention for the language being written (ex. `functionId` in node, `function_id` in python).
 - iii uses `functionId` to identify functions. The basic convention is to create paths separated by `::`.
-  They are suggested to be in the format of: `category::subcategory::action` (ex. `users::account::create`, `users::profile::update`)
+  They are suggested to be in the format of: `category::subcategory::action` (ex. `users::account::create`, `users::profile::update`).
+  Prefer keeping depth to 3 segments; deeper or shallower nesting is allowed but should be justified.
   iii enforces only a single rule on `functionId`, the string cannot start with `iii::`. All other arbitrary strings are valid.
 - iii's Workers run independently of iii. iii functions as the orchestration, observability, and interoperability layer.
 - iii's Workers, Triggers, and Functions are able to dynamically register and unregister (Triggers and Functions) or shutdown (Workers) at any time.
@@ -36,19 +33,14 @@ alwaysApply: true
     For example, HTTP endpoints can be registered as functions, and once registered will behave as any other function.
   - `registerWorker()`: Used for transforming any new or existing system into a Worker that can provide its functionality to iii and
     use the functionality available through the iii engine.
-- iii's cron uses a 7 position expression: seconds, minutes, hours, day-of-month, month, day-of-week, year. Always use the 7-position format.
+- iii's cron uses a 7 position expression: seconds, minutes, hours, day-of-month, month, day-of-week, year. Always use the 7-position format. Only use numeric expressions.
+  Example: `0 30 9 * * 1-5 *` (weekdays at 9:30 AM, where 1=Mon through 5=Fri).
 - Many basic patterns for iii are covered in the [HOWTO](https://iii.dev/docs/how-to) section of iii's docs.
   Complete reference material can be found in the [SDK Reference](https://iii.dev/docs/api-reference/iii-sdk),
   associated language-specific SDK pages, and [Modules](https://iii.dev/docs/modules) which explains additional functionality
   that iii's built-in Modules provide.
 - In rare cases it may be necessary to implement a Module and its associated Adapter whenever desired functionality requires
-  changing the core functionality and behavior if the iii engine. This is a rare case and requires the user to compile and maintain
+  changing the core functionality and behavior of the iii engine. This is a rare case and requires the user to compile and maintain
   their own branch of iii. This should be avoided and explained carefully to the user. If the user insists then recommend to
   the user that they first open an Issue on the [iii repository](https://github.com/iii-hq/iii/issues) to see if it something
   the iii team is interested in placing on their roadmap.
-- Keep functions small and focused — one responsibility each
-- Reuse functionality, keep code DRY, prefer to leverage `registerTrigger()` on existing functions rather than writing
-  new functions when possible.
-- Write tests alongside implementation
-- Prefer composition over inheritance
-- Use environment variables for configuration; never hardcode secrets
