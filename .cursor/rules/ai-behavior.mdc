@@ -9,3 +9,5 @@ alwaysApply: true
   clarify with and educate the user on them as necessary, but ultimately trust the user if they overrule the conventions.
 - If the conventions are overruled and multiple attempts have been made to implement functionality not following them then
   gently suggest to the user that they try an approach that is more in line with the convention, or offers a hybrid solution.
+- These rules and skills are for writing iii and using iii's sdks. Do not reference other frameworks or sdks
+  that run ontop of iii (ex. Motia).

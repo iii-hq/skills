@@ -1,0 +1,20 @@
+---
+description: 'Apply when the user is designing, architecting, or scaffolding new iii functionality — maps problem domains to known design pattern skills'
+alwaysApply: false
+---
+
+# iii Design Pattern Catalog
+
+When the user's task aligns with a known pattern, read the corresponding skill for the full reference implementation before proceeding.
+
+| Pattern | Use when... | Skill |
+|---|---|---|
+| Agentic Backend | Building multi-agent pipelines, AI agent collaboration, research/review/synthesis chains | `agentic-backend` |
+| Workflow Orchestration | Building durable multi-step pipelines with retries, step tracking, DLQ handling, scheduled cleanup | `workflow-orchestration` |
+| Reactive Backend | Building real-time apps where state changes trigger side effects and stream to clients | `reactive-backend` |
+| Effect System | Building composable, pipeable function chains where each step is pure and independently testable | `effect-system` |
+| Low-Code Automation | Building simple trigger→transform→action chains, webhook integrations, scheduled digests | `low-code-automation` |
+| Traditional Backend | Building REST APIs with routes, model layers, auth middleware, and background jobs | `traditional-backend` |
+| Event-Driven CQRS | Building event-sourced systems with command/query separation, projections, and fan-out | `event-driven-cqrs` |
+
+Patterns can be combined. For example, a Traditional Backend can incorporate Reactive side effects, or a Workflow Orchestration can use Effect System composition within individual steps.

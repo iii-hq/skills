@@ -23,7 +23,12 @@ alwaysApply: true
 - iii's Workers run independently of iii. iii functions as the orchestration, observability, and interoperability layer.
 - iii's Workers, Triggers, and Functions are able to dynamically register and unregister (Triggers and Functions) or shutdown (Workers) at any time.
 - When creating new functionality adhere to iii's core functionality:
-  - `trigger()`: Used for all code execution contexts: async/await, sync (will only return void), and queues.
+  - `trigger()`: Used for all code execution contexts. Takes a request object: `trigger({ function_id, payload })` to await
+    a result. Use trigger actions to control delivery:
+    - `TriggerAction.Enqueue({ queue })` — point-to-point async with config-driven retries and ordering. Queue behavior is defined in `iii-config.yaml`.
+    - `TriggerAction.Void()` — fire-and-forget, no queue, no response.
+    - For fan-out (one event, many consumers), use `trigger({ function_id: 'publish', payload: { topic, data } })` combined with `registerTrigger({ type: 'subscribe' })` on each consumer.
+    The old `triggerVoid()` method no longer exists — use `TriggerAction.Void()` instead.
   - `registerTrigger()`: Used for defining when a function will be triggered: direct call via trigger(),
     http request, cron expressions, state updates, event subscriptions, and any other reactive context.
   - `registerFunction()`: Used for defining a function. Registering a function will make the iii engine aware
@@ -31,8 +36,8 @@ alwaysApply: true
     Registered functions get a trigger automatically registered so that function can then be triggered by `functionId`.
     Anything that can receive data and optionally return data can be registered as a function provided the iii ecosystem supports it.
     For example, HTTP endpoints can be registered as functions, and once registered will behave as any other function.
-  - `registerWorker()`: Used for transforming any new or existing system into a Worker that can provide its functionality to iii and
-    use the functionality available through the iii engine.
+  - `registerWorker()`: Used for initializing a Worker and connecting it to the iii engine. In Node, this replaces
+    the old `init()` function. In Python, it replaces `III()` + `connect()`. The worker auto-connects on creation.
 - iii's cron uses a 7 position expression: seconds, minutes, hours, day-of-month, month, day-of-week, year. Always use the 7-position format. Only use numeric expressions.
   Example: `0 30 9 * * 1-5 *` (weekdays at 9:30 AM, where 1=Mon through 5=Fri).
 - Many basic patterns for iii are covered in the [HOWTO](https://iii.dev/docs/how-to) section of iii's docs.
