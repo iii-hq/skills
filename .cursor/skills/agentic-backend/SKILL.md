@@ -46,6 +46,18 @@ HTTP request
 See [reference.js](reference.js) for the full working example — a multi-agent research pipeline
 where a researcher gathers findings, a critic reviews them, and a synthesizer produces a final report.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — async handoff between agents
+- `trigger({ function_id: 'state::set/get/update', payload: { scope, key } })` — shared context between agents
+- Explicit condition check via `await iii.trigger({ function_id: 'condition-fn', payload })` before enqueuing next agent
+- `trigger({ function_id: 'publish', payload: { topic, data }, action: TriggerAction.Void() })` — completion broadcast
+- Each agent as its own `registerFunction` with `agents::` prefix IDs
+- `const { logger } = getContext()` — structured logging per agent
+
 ## Adapting This Pattern
 
 - Replace simulated logic in each agent with real work (API calls, LLM inference, etc.)

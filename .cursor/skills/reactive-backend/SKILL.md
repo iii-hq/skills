@@ -47,6 +47,17 @@ WebSocket clients ← stream 'todos-live'
 See [reference.js](reference.js) for the full working example — a real-time todo app with
 CRUD endpoints, automatic change broadcasting via streams, and reactive aggregate metrics.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- `trigger({ function_id: 'state::set/get', payload: { scope, key, value } })` — CRUD via state module
+- `registerTrigger({ type: 'state', function_id, config: { scope } })` — reactive side effects on state change
+- Event argument destructuring in reactive handlers: `async (event) => { const { new_value, old_value, key } = event }`
+- `trigger({ function_id: 'stream::send', payload, action: TriggerAction.Void() })` — push live updates to clients
+- `const { logger } = getContext()` — structured logging inside handlers
+
 ## Adapting This Pattern
 
 - State triggers fire on **any** change in the scope — use the `event` argument (`new_value`, `old_value`, `key`) to determine what changed

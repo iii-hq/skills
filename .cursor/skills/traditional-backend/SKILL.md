@@ -48,6 +48,18 @@ Cron (3 AM daily) → generate-sitemap
 See [reference.js](reference.js) for the full working example — a blog REST API with
 CRUD routes, token-based auth middleware, model helpers, and a cron-driven sitemap generator.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- `registerFunction({ id }, handler)` with `category::action` function IDs
+- `trigger({ function_id: 'state::...', payload: { scope, key } })` — model-layer state ops
+- `registerTrigger({ type: 'http', function_id, config: { api_path, http_method } })` — route wiring
+- `const { logger } = getContext()` — structured logging inside handlers
+- Auth as a composable function called via `await iii.trigger({ function_id: 'auth-fn', payload: { token } })`
+- 7-position cron for background jobs: `0 0 3 * * * *`
+
 ## Adapting This Pattern
 
 - Group related routes under a shared `functionId` prefix (e.g. `blog::list-posts`, `blog::create-post`)

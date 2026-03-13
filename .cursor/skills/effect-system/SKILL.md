@@ -46,6 +46,18 @@ Pipeline B: import-users-batch
 See [reference.js](reference.js) for the full working example — a user registration pipeline
 composed from 5 primitive effects, plus a batch import pipeline that reuses 4 of the same effects.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- Each effect as a small `registerFunction` with a single responsibility (one validation, one transform, one side effect)
+- `await iii.trigger({ function_id, payload })` — synchronous composition (call effect, get return value)
+- A pipeline function that composes effects sequentially via chained `trigger()` calls
+- Error propagation: effects throw, pipeline catches at the recovery boundary
+- `trigger({ function_id: 'publish', ..., action: TriggerAction.Void() })` — fire-and-forget side effects
+- `functionId` segments reflecting the effect domain: `fx::parse-X`, `fx::persist-X`
+
 ## Adapting This Pattern
 
 - Keep effects small: one validation, one transform, one side effect per function

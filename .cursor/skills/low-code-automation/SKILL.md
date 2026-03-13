@@ -49,6 +49,18 @@ Automation 2: Scheduled digest
 See [reference.js](reference.js) for the full working example — a form-submission pipeline
 (webhook → enrich → store → notify) and a scheduled daily digest.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — chain automation nodes via named queue
+- `registerTrigger({ type: 'http' })` — webhook entry point
+- `registerTrigger({ type: 'cron', config: { expression } })` — scheduled automations (7-position format)
+- `trigger({ function_id: 'state::set/list', payload })` — persist and query data
+- `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` — fan-out notifications
+- Each node as its own `registerFunction` doing one thing
+
 ## Adapting This Pattern
 
 - Each node should do one thing: receive data, optionally transform it, pass it along

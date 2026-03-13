@@ -56,6 +56,18 @@ See [reference.js](reference.js) for the full working example — an inventory s
 add/sell commands, an append-only event log, catalog and analytics projections, and
 low-stock alert fan-out.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- `trigger({ function_id: 'publish', payload: { topic, data }, action: TriggerAction.Void() })` — publish domain events
+- `registerTrigger({ type: 'subscribe', function_id, config: { topic } })` — wire projections/consumers to events
+- Separate state scopes for event log vs. read models (`event-log`, `inventory-read`, etc.)
+- `functionId` prefixes reflecting CQRS role: `cmd::`, `proj::`, `query::`, `notify::`
+- Commands validate then publish — never write directly to read models
+- Projections subscribe independently and must be idempotent
+
 ## Adapting This Pattern
 
 - Commands validate then publish events — never write directly to read models

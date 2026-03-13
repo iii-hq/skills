@@ -52,6 +52,18 @@ See [reference.js](reference.js) for the full working example — an order fulfi
 with validate → charge → ship steps, retry configuration, stream-based progress tracking,
 and hourly stale-order cleanup.
 
+## Minimum Patterns
+
+Any code using this pattern must include at minimum:
+
+- `registerWorker(url, { workerName })` — worker initialization
+- `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — durable step chaining via named queues
+- `trigger({ function_id: 'state::update', payload: { scope, key, ops } })` — step progress tracking
+- Named queues with a comment referencing `iii-config.yaml` for retry/concurrency settings
+- `const { logger } = getContext()` — structured logging per step
+- Each step as its own `registerFunction` with a single responsibility
+- `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` — completion broadcast
+
 ## Adapting This Pattern
 
 - Each step should do one thing and enqueue the next function on success
