@@ -12,6 +12,8 @@ Comparable to: LangGraph, CrewAI, AutoGen, Letta
 
 ## Key Concepts
 
+Use the concepts below when they fit the task. Not every agentic workflow needs all of them.
+
 - Each agent is a registered function with a single responsibility
 - Agents communicate via **named queues** (ordered handoffs) and **shared state** (accumulated context)
 - **Approval gates** are explicit checks in the producing agent before enqueuing the next step
@@ -31,24 +33,24 @@ HTTP request
 
 ## iii Primitives Used
 
-| Primitive | Purpose |
-|---|---|
-| `registerWorker` | Initialize the worker and connect to iii |
-| `registerFunction` | Define each agent |
-| `trigger({ function_id: 'state::set/get/update', payload })` | Shared context between agents |
-| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Async handoff between agents via named queue |
-| `trigger({ function_id, payload })` | Explicit condition check before enqueuing |
-| `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` | Broadcast completion to any listeners |
-| `registerTrigger({ type: 'http' })` | Entry point |
+| Primitive                                                                    | Purpose                                      |
+| ---------------------------------------------------------------------------- | -------------------------------------------- |
+| `registerWorker`                                                             | Initialize the worker and connect to iii     |
+| `registerFunction`                                                           | Define each agent                            |
+| `trigger({ function_id: 'state::set/get/update', payload })`                 | Shared context between agents                |
+| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })`                 | Async handoff between agents via named queue |
+| `trigger({ function_id, payload })`                                          | Explicit condition check before enqueuing    |
+| `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` | Broadcast completion to any listeners        |
+| `registerTrigger({ type: 'http' })`                                          | Entry point                                  |
 
 ## Reference Implementation
 
 See [reference.js](reference.js) for the full working example — a multi-agent research pipeline
 where a researcher gathers findings, a critic reviews them, and a synthesizer produces a final report.
 
-## Minimum Patterns
+## Common Patterns
 
-Any code using this pattern must include at minimum:
+Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — async handoff between agents
@@ -59,6 +61,8 @@ Any code using this pattern must include at minimum:
 - `const { logger } = getContext()` — structured logging per agent
 
 ## Adapting This Pattern
+
+Use the adaptations below when they apply to the task.
 
 - Replace simulated logic in each agent with real work (API calls, LLM inference, etc.)
 - Add more agents by registering functions and enqueuing to them with `TriggerAction.Enqueue({ queue })`

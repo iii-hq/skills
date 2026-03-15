@@ -13,6 +13,6 @@ alwaysApply: true
   that run ontop of iii (ex. Motia).
 - Before writing any iii code, consult the `iii-design-patterns` rule to identify which skill(s) apply. Read the matching
   skill's SKILL.md and reference.js before writing. If no skill maps directly, compose from the closest skill(s) listed
-  under "Also consult" in the Use Case → Skill Lookup table and note which ones were used. Read 2 skills at most.
+  under "Also consult" in the Use Case → Skill Lookup table and note which ones were used. Read only the skills you need.
 - When distilling a skill's reference implementation into a shorter snippet, verify the result includes every item
   from the skill's "Minimum Patterns" section. Missing a minimum pattern means the snippet is incorrect.

@@ -12,6 +12,8 @@ Comparable to: n8n, Zapier, LangFlow
 
 ## Key Concepts
 
+Use the concepts below when they fit the task. Not every automation needs every trigger or handoff style shown here.
+
 - Each "node" in the automation is a small registered function
 - Nodes chain via **named queues**: webhook → enrich → store → notify
 - Easy to add, remove, or reorder steps by changing enqueue targets
@@ -34,24 +36,24 @@ Automation 2: Scheduled digest
 
 ## iii Primitives Used
 
-| Primitive | Purpose |
-|---|---|
-| `registerWorker` | Initialize the worker and connect to iii |
-| `registerFunction` | Define each automation node |
-| `registerTrigger({ type: 'http' })` | Webhook entry points |
-| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Chain nodes via named queue |
-| `trigger({ ..., action: TriggerAction.Void() })` | Fire-and-forget publish |
-| `trigger({ function_id: 'state::...', payload })` | Persist and query data |
-| `registerTrigger({ type: 'cron' })` | Scheduled automations |
+| Primitive                                                    | Purpose                                  |
+| ------------------------------------------------------------ | ---------------------------------------- |
+| `registerWorker`                                             | Initialize the worker and connect to iii |
+| `registerFunction`                                           | Define each automation node              |
+| `registerTrigger({ type: 'http' })`                          | Webhook entry points                     |
+| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Chain nodes via named queue              |
+| `trigger({ ..., action: TriggerAction.Void() })`             | Fire-and-forget publish                  |
+| `trigger({ function_id: 'state::...', payload })`            | Persist and query data                   |
+| `registerTrigger({ type: 'cron' })`                          | Scheduled automations                    |
 
 ## Reference Implementation
 
 See [reference.js](reference.js) for the full working example — a form-submission pipeline
 (webhook → enrich → store → notify) and a scheduled daily digest.
 
-## Minimum Patterns
+## Common Patterns
 
-Any code using this pattern must include at minimum:
+Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — chain automation nodes via named queue
@@ -62,6 +64,8 @@ Any code using this pattern must include at minimum:
 - Each node as its own `registerFunction` doing one thing
 
 ## Adapting This Pattern
+
+Use the adaptations below when they apply to the task.
 
 - Each node should do one thing: receive data, optionally transform it, pass it along
 - Adding a step = register a function + update the previous node's enqueue target to the new function

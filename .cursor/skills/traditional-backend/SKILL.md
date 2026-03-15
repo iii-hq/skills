@@ -13,6 +13,8 @@ Comparable to: Ruby on Rails, Java Spring Boot, Express.js
 
 ## Key Concepts
 
+Use the concepts below when they fit the task. Not every traditional backend needs every supporting pattern shown here.
+
 - **Routes** are HTTP-triggered functions (GET, POST, etc.)
 - **Models** are helper functions wrapping `state::` operations (find, list, save, delete)
 - **Middleware** (auth, logging) is implemented as composable functions called at the start of a handler
@@ -33,24 +35,24 @@ Cron (3 AM daily) → generate-sitemap
 
 ## iii Primitives Used
 
-| Primitive | Purpose |
-|---|---|
-| `registerWorker` | Initialize the worker and connect to iii |
-| `registerFunction` | Route handlers, middleware, background jobs |
-| `trigger({ function_id, payload })` | Call middleware (auth) from handlers |
-| `trigger({ function_id: 'state::...', payload })` | Model layer |
-| `trigger({ ..., action: TriggerAction.Void() })` | Fire-and-forget domain event broadcast |
-| `registerTrigger({ type: 'http' })` | Route definitions |
-| `registerTrigger({ type: 'cron' })` | Scheduled jobs |
+| Primitive                                         | Purpose                                     |
+| ------------------------------------------------- | ------------------------------------------- |
+| `registerWorker`                                  | Initialize the worker and connect to iii    |
+| `registerFunction`                                | Route handlers, middleware, background jobs |
+| `trigger({ function_id, payload })`               | Call middleware (auth) from handlers        |
+| `trigger({ function_id: 'state::...', payload })` | Model layer                                 |
+| `trigger({ ..., action: TriggerAction.Void() })`  | Fire-and-forget domain event broadcast      |
+| `registerTrigger({ type: 'http' })`               | Route definitions                           |
+| `registerTrigger({ type: 'cron' })`               | Scheduled jobs                              |
 
 ## Reference Implementation
 
 See [reference.js](reference.js) for the full working example — a blog REST API with
 CRUD routes, token-based auth middleware, model helpers, and a cron-driven sitemap generator.
 
-## Minimum Patterns
+## Common Patterns
 
-Any code using this pattern must include at minimum:
+Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `registerFunction({ id }, handler)` with `category::action` function IDs
@@ -61,6 +63,8 @@ Any code using this pattern must include at minimum:
 - 7-position cron for background jobs: `0 0 3 * * * *`
 
 ## Adapting This Pattern
+
+Use the adaptations below when they apply to the task.
 
 - Group related routes under a shared `functionId` prefix (e.g. `blog::list-posts`, `blog::create-post`)
 - Auth middleware is just a function — call it via `await iii.trigger({ function_id: 'your::auth-fn', payload: { token } })` at the start of protected handlers

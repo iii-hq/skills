@@ -12,6 +12,8 @@ Comparable to: Kafka, RabbitMQ, CQRS/Event Sourcing systems
 
 ## Key Concepts
 
+Use the concepts below when they fit the task. Not every event-driven system needs every CQRS element shown here.
+
 - **Commands** validate input and append to an event log (write side)
 - Commands **publish** domain events via pubsub
 - **Projections** subscribe to events and build query-optimized read models (read side)
@@ -41,14 +43,14 @@ Query endpoints:
 
 ## iii Primitives Used
 
-| Primitive | Purpose |
-|---|---|
-| `registerWorker` | Initialize the worker and connect to iii |
-| `registerFunction` | Commands, projections, queries, notification handlers |
-| `trigger({ function_id: 'state::...', payload })` | Event log storage, read model persistence, incremental updates |
-| `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` | Publish domain events and notifications |
-| `registerTrigger({ type: 'subscribe' })` | Wire projections and consumers to events |
-| `registerTrigger({ type: 'http' })` | Command and query endpoints |
+| Primitive                                                                    | Purpose                                                        |
+| ---------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `registerWorker`                                                             | Initialize the worker and connect to iii                       |
+| `registerFunction`                                                           | Commands, projections, queries, notification handlers          |
+| `trigger({ function_id: 'state::...', payload })`                            | Event log storage, read model persistence, incremental updates |
+| `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` | Publish domain events and notifications                        |
+| `registerTrigger({ type: 'subscribe' })`                                     | Wire projections and consumers to events                       |
+| `registerTrigger({ type: 'http' })`                                          | Command and query endpoints                                    |
 
 ## Reference Implementation
 
@@ -56,9 +58,9 @@ See [reference.js](reference.js) for the full working example — an inventory s
 add/sell commands, an append-only event log, catalog and analytics projections, and
 low-stock alert fan-out.
 
-## Minimum Patterns
+## Common Patterns
 
-Any code using this pattern must include at minimum:
+Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `trigger({ function_id: 'publish', payload: { topic, data }, action: TriggerAction.Void() })` — publish domain events
@@ -69,6 +71,8 @@ Any code using this pattern must include at minimum:
 - Projections subscribe independently and must be idempotent
 
 ## Adapting This Pattern
+
+Use the adaptations below when they apply to the task.
 
 - Commands validate then publish events — never write directly to read models
 - Projections must be idempotent (safe to replay)

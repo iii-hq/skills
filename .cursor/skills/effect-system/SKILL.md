@@ -12,6 +12,8 @@ Comparable to: Effect-TS
 
 ## Key Concepts
 
+Use the concepts below when they fit the task. Not every effect-style pipeline needs all of them.
+
 - Each "effect" is a small, focused registered function (validate, check-duplicate, enrich, persist, notify)
 - Pipelines compose effects by calling `iii.trigger()` sequentially — like `Effect.pipe`
 - The same primitives are reused across different pipelines (single registration, multi-use composition)
@@ -32,23 +34,23 @@ Pipeline B: import-users-batch
 
 ## iii Primitives Used
 
-| Primitive | Purpose |
-|---|---|
-| `registerWorker` | Initialize the worker and connect to iii |
-| `registerFunction` | Define each effect (pure-ish function) |
-| `trigger({ function_id, payload })` | Synchronous composition — call one effect from another, get the return value |
-| `trigger({ ..., action: TriggerAction.Void() })` | Fire-and-forget side effects (publish) |
-| `trigger({ function_id: 'state::set/get', payload })` | Persistence effects |
-| `registerTrigger({ type: 'http' })` | Expose pipelines as endpoints |
+| Primitive                                             | Purpose                                                                      |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `registerWorker`                                      | Initialize the worker and connect to iii                                     |
+| `registerFunction`                                    | Define each effect (pure-ish function)                                       |
+| `trigger({ function_id, payload })`                   | Synchronous composition — call one effect from another, get the return value |
+| `trigger({ ..., action: TriggerAction.Void() })`      | Fire-and-forget side effects (publish)                                       |
+| `trigger({ function_id: 'state::set/get', payload })` | Persistence effects                                                          |
+| `registerTrigger({ type: 'http' })`                   | Expose pipelines as endpoints                                                |
 
 ## Reference Implementation
 
 See [reference.js](reference.js) for the full working example — a user registration pipeline
 composed from 5 primitive effects, plus a batch import pipeline that reuses 4 of the same effects.
 
-## Minimum Patterns
+## Common Patterns
 
-Any code using this pattern must include at minimum:
+Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - Each effect as a small `registerFunction` with a single responsibility (one validation, one transform, one side effect)
@@ -59,6 +61,8 @@ Any code using this pattern must include at minimum:
 - `functionId` segments reflecting the effect domain: `fx::parse-X`, `fx::persist-X`
 
 ## Adapting This Pattern
+
+Use the adaptations below when they apply to the task.
 
 - Keep effects small: one validation, one transform, one side effect per function
 - Compose via `await iii.trigger({ function_id: effectId, payload: data })` — each call is traced and independently retryable

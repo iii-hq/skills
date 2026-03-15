@@ -12,6 +12,8 @@ Comparable to: Temporal, Airflow, Inngest
 
 ## Key Concepts
 
+Use the concepts below when they fit the task. Not every workflow needs every durability or tracking mechanism shown here.
+
 - Each pipeline step is a registered function chained via **named queues** with config-driven retries
 - Step progress is tracked in **shared state** and broadcast via **streams**
 - A **cron trigger** handles scheduled maintenance (e.g. stale order cleanup)
@@ -36,15 +38,15 @@ Queue configs (iii-config.yaml):
 
 ## iii Primitives Used
 
-| Primitive | Purpose |
-|---|---|
-| `registerWorker` | Initialize the worker and connect to iii |
-| `registerFunction` | Define each pipeline step |
-| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Durable step chaining via named queues |
-| `trigger({ function_id: 'state::...', payload })` | Track step progress |
-| `trigger({ ..., action: TriggerAction.Void() })` | Fire-and-forget stream events and publish |
-| `registerTrigger({ type: 'cron' })` | Scheduled maintenance |
-| `registerTrigger({ type: 'http' })` | Entry point |
+| Primitive                                                    | Purpose                                   |
+| ------------------------------------------------------------ | ----------------------------------------- |
+| `registerWorker`                                             | Initialize the worker and connect to iii  |
+| `registerFunction`                                           | Define each pipeline step                 |
+| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Durable step chaining via named queues    |
+| `trigger({ function_id: 'state::...', payload })`            | Track step progress                       |
+| `trigger({ ..., action: TriggerAction.Void() })`             | Fire-and-forget stream events and publish |
+| `registerTrigger({ type: 'cron' })`                          | Scheduled maintenance                     |
+| `registerTrigger({ type: 'http' })`                          | Entry point                               |
 
 ## Reference Implementation
 
@@ -52,9 +54,9 @@ See [reference.js](reference.js) for the full working example — an order fulfi
 with validate → charge → ship steps, retry configuration, stream-based progress tracking,
 and hourly stale-order cleanup.
 
-## Minimum Patterns
+## Common Patterns
 
-Any code using this pattern must include at minimum:
+Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — durable step chaining via named queues
@@ -65,6 +67,8 @@ Any code using this pattern must include at minimum:
 - `trigger({ function_id: 'publish', payload, action: TriggerAction.Void() })` — completion broadcast
 
 ## Adapting This Pattern
+
+Use the adaptations below when they apply to the task.
 
 - Each step should do one thing and enqueue the next function on success
 - Define separate named queues in `iii-config.yaml` when steps need different retry/concurrency settings
