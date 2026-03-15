@@ -1,9 +1,9 @@
 /**
- * Pattern: Traditional Backend Framework
+ * Pattern: Traditional Backend Adaptation
  * Comparable to: Ruby on Rails, Java Spring Boot, Express.js
  *
- * Demonstrates a familiar REST API for a blog, with routes, a
- * "model" layer backed by iii state, and "middleware-like"
+ * Demonstrates adapting a familiar REST API for a blog into iii,
+ * with optional state-backed persistence and middleware-like
  * cross-cutting concerns (auth, logging) via function composition.
  *
  * How-to references:
@@ -12,14 +12,14 @@
  *   - Cron:             https://iii.dev/docs/how-to/schedule-cron-task
  */
 
-import { registerWorker, getContext, TriggerAction } from 'iii-sdk'
+import { registerWorker, Logger, TriggerAction } from 'iii-sdk'
 
 const iii = registerWorker(process.env.III_ENGINE_URL || 'ws://localhost:49134', {
   workerName: 'traditional-backend',
 })
 
 // ---------------------------------------------------------------------------
-// "Middleware" — auth check as a composable function
+// "Middleware" adaptation — auth check as a composable function
 // ---------------------------------------------------------------------------
 iii.registerFunction({ id: 'blog::authenticate' }, async (data) => {
   if (!data.token || data.token !== 'valid-token') {
@@ -29,7 +29,7 @@ iii.registerFunction({ id: 'blog::authenticate' }, async (data) => {
 })
 
 // ---------------------------------------------------------------------------
-// "Model" helpers — CRUD operations on the posts collection
+// Optional state-backed helpers for the posts collection
 // ---------------------------------------------------------------------------
 async function findPost(id) {
   return await iii.trigger({ function_id: 'state::get', payload: { scope: 'posts', key: id } })
@@ -71,7 +71,7 @@ iii.registerFunction({ id: 'blog::get-post' }, async (data) => {
 
 // POST /posts — create (authenticated)
 iii.registerFunction({ id: 'blog::create-post' }, async (data) => {
-  const { logger } = getContext()
+  const logger = new Logger()
   const user = await iii.trigger({ function_id: 'blog::authenticate', payload: { token: data.token } })
 
   const post = {
@@ -131,10 +131,10 @@ iii.registerTrigger({ type: 'http', function_id: 'blog::update-post', config: { 
 iii.registerTrigger({ type: 'http', function_id: 'blog::delete-post', config: { api_path: '/posts/delete', http_method: 'POST' } })
 
 // ---------------------------------------------------------------------------
-// "Background job" — scheduled sitemap generation (like a Rails cron job)
+// Scheduled work — sitemap generation (like a Rails cron task)
 // ---------------------------------------------------------------------------
 iii.registerFunction({ id: 'blog::generate-sitemap' }, async () => {
-  const { logger } = getContext()
+  const logger = new Logger()
   const posts = await listPosts()
 
   const urls = posts.map((p) => ({
