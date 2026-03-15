@@ -11,3 +11,4 @@ alwaysApply: true
 - Write tests alongside implementation.
 - Prefer composition over inheritance.
 - Use environment variables for configuration; never hardcode secrets.
+- Always read the `common-misunderstandings` skill.

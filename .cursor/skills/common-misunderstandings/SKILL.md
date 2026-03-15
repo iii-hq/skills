@@ -33,3 +33,7 @@ Use this skill as a lightweight registry of corrected assumptions.
 
 - Misunderstanding: cron is iii's version of background jobs.
   Correction: iii has cron triggers for scheduled work. Avoid framing cron as a generic background-job abstraction.
+
+- Misunderstanding: shared state is a simple key value store.
+  Correction: shared state is for storing small amounts of data using primitive types such as string. It is subject to the same
+  constraints as Redis or similar key value stores.
