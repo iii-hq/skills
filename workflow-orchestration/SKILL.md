@@ -1,9 +1,10 @@
 ---
 name: workflow-orchestration
 description: >-
-  Reference implementation for durable multi-step workflow pipelines in iii. Use
-  when building order fulfillment, data pipelines, or any sequential process
-  requiring retries, backoff, step tracking, scheduled cleanup, or DLQ handling.
+  Orchestrates durable multi-step workflow pipelines on the iii platform. Use
+  when building order fulfillment, data pipelines, task orchestration, or any
+  sequential process requiring retries, backoff, step tracking, scheduled
+  cleanup, or dead letter queue (DLQ) handling.
 ---
 
 # Workflow Orchestration & Durable Execution

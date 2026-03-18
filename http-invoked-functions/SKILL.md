@@ -1,10 +1,11 @@
 ---
 name: http-invoked-functions
 description: >-
-  Reference implementation for registering external HTTP endpoints as iii
-  functions. Use when integrating webhooks, serverless functions, or third-party
-  APIs so the engine calls them on trigger — no client-side HTTP code needed.
-  Covers HttpInvocationConfig, auth options, and combining with cron/state/queue triggers.
+  Registers external HTTP endpoints as iii platform functions. Use when
+  integrating webhooks, serverless functions, or third-party APIs so the engine
+  calls them on trigger — no client-side HTTP code needed. Covers
+  HttpInvocationConfig, auth options, and combining with cron/state/queue
+  triggers.
 ---
 
 # HTTP-Invoked Functions

@@ -1,9 +1,10 @@
 ---
 name: common-misunderstandings
 description: >-
-  Tracks recurring iii misconceptions that the user has corrected. Use when a
-  misunderstanding repeats across skills, examples, or responses, and after the
-  user confirms it should be captured as shared guidance.
+  Tracks recurring iii platform misconceptions that the user has corrected. Use
+  when a wrong assumption or misunderstanding repeats across skills, examples,
+  or responses, and after the user confirms it should be captured as shared
+  guidance.
 ---
 
 # Common Misunderstandings

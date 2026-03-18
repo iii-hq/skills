@@ -1,9 +1,10 @@
 ---
 name: effect-system
 description: >-
-  Reference implementation for composable function pipelines in iii. Use when
-  building typed functional workflows where each step is a pure function that
-  can be independently tested, reused across pipelines, and traced end-to-end.
+  Composes and chains function pipelines on the iii platform. Use when building
+  typed functional workflows, function composition, or data pipelines where each
+  step is a pure function that can be independently tested, reused across
+  pipelines, and traced end-to-end.
 ---
 
 # Effect System & Typed Functional Infrastructure

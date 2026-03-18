@@ -1,10 +1,10 @@
 ---
 name: traditional-backend
 description: >-
-  Guidance for adapting traditional and legacy backends into iii. Use when
-  wrapping an existing REST API, framework, or service so iii can register its
-  functionality, add iii logging and observability, and expose existing
-  behavior through iii primitives with minimal changes.
+  Wraps and adapts traditional and legacy backends into the iii platform. Use
+  when migrating or integrating an existing REST API, framework, or service so
+  iii can register its functionality, add logging and observability, and expose
+  existing behavior through iii primitives with minimal changes.
 ---
 
 # Traditional and Legacy Backend Adaptation

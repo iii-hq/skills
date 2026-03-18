@@ -1,9 +1,10 @@
 ---
 name: agentic-backend
 description: >-
-  Reference implementation for multi-agent pipelines in iii. Use when building
-  AI agent collaboration, research/review/synthesis chains, or any system where
-  specialized agents hand off work through queues and shared state.
+  Creates and orchestrates multi-agent pipelines on the iii platform. Use when
+  building AI agent collaboration, agent orchestration, research/review/synthesis
+  chains, or any system where specialized agents hand off work through queues
+  and shared state.
 ---
 
 # Agentic Backend

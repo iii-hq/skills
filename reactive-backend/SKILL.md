@@ -1,10 +1,10 @@
 ---
 name: reactive-backend
 description: >-
-  Reference implementation for reactive real-time backends in iii. Use when
-  building apps where state changes automatically trigger side effects,
-  clients receive live updates via streams, or you need a real-time database
-  layer with CRUD endpoints.
+  Builds reactive real-time backends on the iii platform. Use when building
+  event-driven apps where state changes automatically trigger side effects,
+  clients receive live updates via streams or websockets, or you need a
+  real-time database layer with pub/sub and CRUD endpoints.
 ---
 
 # Reactive Backend

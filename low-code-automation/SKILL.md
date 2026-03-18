@@ -1,9 +1,9 @@
 ---
 name: low-code-automation
 description: >-
-  Reference implementation for low-code automation workflows in iii. Use when
-  building webhook integrations, trigger-transform-action chains, scheduled
-  digests, or Zapier/n8n-style automations.
+  Builds and configures low-code automation workflows on the iii platform. Use
+  when building webhook integrations, trigger-transform-action chains, scheduled
+  digests, or Zapier/n8n-style workflow automations.
 ---
 
 # Low-Code / No-Code Workflow Builders
