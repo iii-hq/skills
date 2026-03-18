@@ -82,7 +82,6 @@ Apply the smallest adaptation that satisfies the request. Omit every bullet belo
 - Keep comparison snippets behaviorally parallel: same resource, payload, auth location, validation, and response shape across variants
 - Use middleware as an ingestion and observability layer when the backend can be modified
 - Split auth into its own function only when more than one adapted path needs the same check
-- Add state-backed helpers only when shared application state is actually part of the application design
 - For RESTful resources, follow the convention: `domain::list-X`, `domain::get-X`, `domain::create-X`, `domain::update-X`, `domain::delete-X`
 - Add cron only when scheduled work is part of the task; use 7-position numeric format like `0 0 3 * * * *`
 
