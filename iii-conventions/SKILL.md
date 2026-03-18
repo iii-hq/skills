@@ -1,6 +1,9 @@
 ---
-description: 'iii technical conventions that must be followed'
-alwaysApply: true
+name: iii-conventions
+description: >-
+  Core iii engine technical conventions. Consult when writing any iii code to
+  ensure correct use of primitives (functions, triggers, workers), trigger
+  actions, cron expressions, functionId naming, and language-specific conventions.
 ---
 
 # iii Technical Conventions

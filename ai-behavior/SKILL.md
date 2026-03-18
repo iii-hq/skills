@@ -1,6 +1,9 @@
 ---
-description: 'How the AI should handle conventions and user authority'
-alwaysApply: true
+name: ai-behavior
+description: >-
+  Governs how the AI handles iii conventions and user authority. Consult before
+  writing any iii code to understand convention precedence, when to defer to the
+  user, and how to select the right skill for a task.
 ---
 
 # AI Behavior
@@ -11,7 +14,7 @@ alwaysApply: true
   gently suggest to the user that they try an approach that is more in line with the convention, or offers a hybrid solution.
 - These rules and skills are for writing iii and using iii's sdks. Do not reference other frameworks or sdks
   that run ontop of iii (ex. Motia).
-- Before writing any iii code, consult the `iii-design-patterns` rule to identify which skill(s) apply. Read the matching
+- Before writing any iii code, consult the `iii-design-patterns` skill to identify which skill(s) apply. Read the matching
   skill's SKILL.md and reference.js before writing. If no skill maps directly, compose from the closest skill(s) listed
   under "Also consult" in the Use Case → Skill Lookup table and note which ones were used. Read only the skills you need.
 - When distilling a skill's reference implementation into a shorter snippet, verify the result includes every item

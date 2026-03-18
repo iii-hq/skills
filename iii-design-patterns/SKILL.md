@@ -1,6 +1,9 @@
 ---
-description: 'Apply when the user is designing, architecting, or scaffolding new iii functionality — maps problem domains to known design pattern skills'
-alwaysApply: false
+name: iii-design-patterns
+description: >-
+  Maps problem domains to iii design pattern skills. Consult when designing,
+  architecting, or scaffolding new iii functionality to find the right skill
+  for the task before writing any code.
 ---
 
 # iii Design Pattern Catalog
@@ -41,6 +44,6 @@ Not every use case maps 1:1 to a single skill. Use this table to find which skil
 | Composable function pipelines | `effect-system` | — |
 | Scheduled tasks, cron jobs | `traditional-backend` | `low-code-automation` (cron + digest pattern) |
 
-When a use case maps to "conventions only," there is no dedicated skill — derive the implementation from the iii conventions rule and the closest skill listed under "Also consult."
+When a use case maps to "conventions only," there is no dedicated skill — derive the implementation from the iii conventions skill and the closest skill listed under "Also consult."
 
 Patterns can be combined. For example, a Traditional Backend can incorporate Reactive side effects, or a Workflow Orchestration can use Effect System composition within individual steps.

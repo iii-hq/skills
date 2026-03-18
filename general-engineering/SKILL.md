@@ -1,6 +1,9 @@
 ---
-description: 'General software engineering principles'
-alwaysApply: true
+name: general-engineering
+description: >-
+  General software engineering principles for iii projects. Consult when writing
+  or reviewing iii code to ensure functions are focused, code is DRY, tests are
+  written, and common misunderstandings are avoided.
 ---
 
 # General Engineering Principles
