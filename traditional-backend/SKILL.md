@@ -1,7 +1,7 @@
 ---
 name: traditional-backend
 description: >-
-  Wraps and adapts traditional and legacy backends into the iii platform. Use
+  Wraps and adapts traditional and legacy backends into the iii engine. Use
   when migrating or integrating an existing REST API, framework, or service so
   iii can register its functionality, add logging and observability, and expose
   existing behavior through iii primitives with minimal changes.
@@ -82,7 +82,7 @@ Apply the smallest adaptation that satisfies the request. Omit every bullet belo
 - Keep comparison snippets behaviorally parallel: same resource, payload, auth location, validation, and response shape across variants
 - Use middleware as an ingestion and observability layer when the backend can be modified
 - Split auth into its own function only when more than one adapted path needs the same check
-- For RESTful resources, follow the convention: `domain::list-X`, `domain::get-X`, `domain::create-X`, `domain::update-X`, `domain::delete-X`
+- For RESTful resources, follow the convention: `resource::X::list`, `resource::X::get`, `resource::X::create`, `resource::X::update`, `resource::X::delete`
 - Add cron only when scheduled work is part of the task; use 7-position numeric format like `0 0 3 * * * *`
 
 ## Common Misunderstandings

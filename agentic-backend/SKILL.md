@@ -1,7 +1,7 @@
 ---
 name: agentic-backend
 description: >-
-  Creates and orchestrates multi-agent pipelines on the iii platform. Use when
+  Creates and orchestrates multi-agent pipelines on the iii engine. Use when
   building AI agent collaboration, agent orchestration, research/review/synthesis
   chains, or any system where specialized agents hand off work through queues
   and shared state.

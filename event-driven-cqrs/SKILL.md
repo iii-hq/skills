@@ -1,7 +1,7 @@
 ---
 name: event-driven-cqrs
 description: >-
-  Implements event-driven CQRS systems on the iii platform. Use when building
+  Implements event-driven CQRS systems on the iii engine. Use when building
   event-sourced architectures with command/query separation, read model
   projections, append-only event logs, or fan-out notifications.
 ---

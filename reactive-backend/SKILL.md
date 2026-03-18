@@ -1,7 +1,7 @@
 ---
 name: reactive-backend
 description: >-
-  Builds reactive real-time backends on the iii platform. Use when building
+  Builds reactive real-time backends on the iii engine. Use when building
   event-driven apps where state changes automatically trigger side effects,
   clients receive live updates via streams or websockets, or you need a
   real-time database layer with pub/sub and CRUD endpoints.

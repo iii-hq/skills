@@ -1,25 +1,16 @@
 ---
 name: common-misunderstandings
 description: >-
-  Tracks recurring iii platform misconceptions that the user has corrected. Use
-  when a wrong assumption or misunderstanding repeats across skills, examples,
-  or responses, and after the user confirms it should be captured as shared
-  guidance.
+  Common iii engine misconceptions and their corrections. Consult this skill
+  to avoid wrong assumptions when working with iii concepts like state
+  operations, registerFunction, cron triggers, or backend adaptation patterns.
 ---
 
 # Common Misunderstandings
 
-Use this skill as a lightweight registry of corrected assumptions.
+A curated list of frequently misunderstood iii concepts and the correct mental models.
 
-## How To Use It
-
-- Apply the correction in the current task first.
-- If the misunderstanding looks reusable, suggest adding it here.
-- Only add or change entries after the user confirms.
-- Keep entries short and scoped to the misunderstanding, the correction, and when it applies.
-- Prefer concrete iii-specific misunderstandings over style preferences.
-
-## Current Entries
+## Entries
 
 ### Traditional Backend Adaptation
 

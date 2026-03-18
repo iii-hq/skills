@@ -1,7 +1,7 @@
 ---
 name: effect-system
 description: >-
-  Composes and chains function pipelines on the iii platform. Use when building
+  Composes and chains function pipelines on the iii engine. Use when building
   typed functional workflows, function composition, or data pipelines where each
   step is a pure function that can be independently tested, reused across
   pipelines, and traced end-to-end.
