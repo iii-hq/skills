@@ -1,0 +1,51 @@
+---
+description: 'iii technical conventions that must be followed'
+alwaysApply: true
+---
+
+# iii Technical Conventions
+
+- It is necessary to know iii's core primitives to properly architect software with it. They are [Functions, Triggers, and Workers](https://iii.dev/docs/primitives-and-concepts/functions-triggers-workers.mdx).
+- When adapting existing codebases to use iii the preference should be towards using the conventions of the existing project
+  and its libraries to create functionality that automatically registers these existing services with iii as Workers with
+  Triggers and Functions.
+- When adapting existing codebases the preference should always be to make as minimal of changes to the existing codebase as possible.
+- Most iii Workers will be long-running processes however this might not always be the case and there may be times where
+  the desired behavior is a Worker that exists temporarily and will `shutdown()` when it has completed its task.
+  There may also be serverless functions which run as an HTTP endpoint and don't warrant being treated as a worker.
+  Instead they can be registered as a function as described in the `registerFunction()` list item below.
+- iii allows for any programming language to be used with it. This document uses camelCase but you should use
+  the proper convention for the language being written (ex. `functionId` in node, `function_id` in python).
+- iii uses `functionId` to identify functions. The basic convention is to create paths separated by `::`.
+  They are suggested to be in the format of: `category::subcategory::action` (ex. `users::account::create`, `users::profile::update`).
+  Prefer keeping depth to 3 segments; deeper or shallower nesting is allowed but should be justified.
+  iii enforces only a single rule on `functionId`, the string cannot start with `iii::`. All other arbitrary strings are valid.
+- iii's Workers run independently of iii. iii functions as the orchestration, observability, and interoperability layer.
+- iii's Workers, Triggers, and Functions are able to dynamically register and unregister (Triggers and Functions) or shutdown (Workers) at any time.
+- When creating new functionality adhere to iii's core functionality:
+  - `trigger()`: Used for all code execution contexts. Takes a request object: `trigger({ function_id, payload })` to await
+    a result. Use trigger actions to control delivery:
+    - `TriggerAction.Enqueue({ queue })` — point-to-point async with config-driven retries and ordering. Queue behavior is defined in `iii-config.yaml`.
+    - `TriggerAction.Void()` — fire-and-forget, no queue, no response.
+    - For fan-out (one event, many consumers), use `trigger({ function_id: 'publish', payload: { topic, data } })` combined with `registerTrigger({ type: 'subscribe' })` on each consumer.
+    The old `triggerVoid()` method no longer exists — use `TriggerAction.Void()` instead.
+  - `registerTrigger()`: Used for defining when a function will be triggered: direct call via trigger(),
+    http request, cron expressions, state updates, event subscriptions, and any other reactive context.
+  - `registerFunction()`: Used for defining a function. Registering a function will make the iii engine aware
+    of the function and as a result all of the Workers connected to iii will be able to call that function.
+    Registered functions get a trigger automatically registered so that function can then be triggered by `functionId`.
+    Anything that can receive data and optionally return data can be registered as a function provided the iii ecosystem supports it.
+    For example, HTTP endpoints can be registered as functions, and once registered will behave as any other function.
+  - `registerWorker()`: Used for initializing a Worker and connecting it to the iii engine. In Node, this replaces
+    the old `init()` function. In Python, it replaces `III()` + `connect()`. The worker auto-connects on creation.
+- iii's cron uses a 7 position expression: seconds, minutes, hours, day-of-month, month, day-of-week, year. Always use the 7-position format. Only use numeric expressions.
+  Example: `0 30 9 * * 1-5 *` (weekdays at 9:30 AM, where 1=Mon through 5=Fri).
+- Many basic patterns for iii are covered in the [HOWTO](https://iii.dev/docs/how-to) section of iii's docs.
+  Complete reference material can be found in the [SDK Reference](https://iii.dev/docs/api-reference/iii-sdk),
+  associated language-specific SDK pages, and [Modules](https://iii.dev/docs/modules) which explains additional functionality
+  that iii's built-in Modules provide.
+- In rare cases it may be necessary to implement a Module and its associated Adapter whenever desired functionality requires
+  changing the core functionality and behavior of the iii engine. This is a rare case and requires the user to compile and maintain
+  their own branch of iii. This should be avoided and explained carefully to the user. If the user insists then recommend to
+  the user that they first open an Issue on the [iii repository](https://github.com/iii-hq/iii/issues) to see if it something
+  the iii team is interested in placing on their roadmap.
