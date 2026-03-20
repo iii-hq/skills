@@ -42,4 +42,4 @@ Use this pattern when iii should call external HTTP endpoints as functions.
 
 ## Reference
 
-See [reference.js](reference.js).
+See [references/reference.js](references/reference.js).
