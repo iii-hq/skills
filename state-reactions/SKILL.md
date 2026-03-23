@@ -1,8 +1,11 @@
 ---
 name: state-reactions
 description: >-
-  Automatically triggers functions when state values change. Use when building
-  reactive side effects, audit logs, or notifications on data changes.
+  Registers state-type triggers that automatically fire functions when key-value
+  state is created, updated, or deleted within a scope. Use when building
+  reactive side effects, change watchers, audit logs, cache invalidation,
+  notification dispatchers, or any observer pattern where data changes should
+  trigger downstream processing.
 ---
 
 # State Reactions

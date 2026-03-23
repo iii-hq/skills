@@ -1,8 +1,10 @@
 ---
 name: queue-processing
 description: >-
-  Processes async jobs with retries, concurrency, and ordering via named queues.
-  Use when offloading work, building pipelines, or needing guaranteed delivery.
+  Enqueues jobs, configures retry policies, sets concurrency limits, and orders
+  messages via named standard or FIFO queues. Use when building background job
+  workers, task queues, message queues, async pipelines, or any pattern needing
+  guaranteed delivery with exponential backoff and dead-letter handling.
 ---
 
 # Queue Processing
