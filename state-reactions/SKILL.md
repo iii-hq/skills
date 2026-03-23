@@ -64,6 +64,10 @@ Use the adaptations below when they apply to the task.
 - Add a `condition_function_id` to filter — only react when the condition function returns truthy
 - Chain reactions by writing state in one handler that triggers another reaction on a different scope
 
+## Engine Configuration
+
+StateModule must be enabled in iii-config.yaml for state triggers to fire. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
+
 ## Pattern Boundaries
 
 - If the task is about directly reading or writing state without reactions, prefer `state-management`.

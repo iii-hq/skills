@@ -66,6 +66,12 @@ Use the adaptations below when they apply to the task.
 
 ## Pattern Boundaries
 
+## Engine Configuration
+
+Named queues are declared in iii-config.yaml under `queue_configs` with per-queue `max_retries`, `concurrency`, `type`, and `backoff_ms`. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
+
+## Pattern Boundaries
+
 - If the task only needs fire-and-forget without retries or ordering, prefer `trigger-actions` with `TriggerAction.Void()`.
 - If failed jobs need special handling or alerting, prefer `dead-letter-queues` for the DLQ consumer.
 - If the task is step-by-step orchestration with branching, prefer `workflow-orchestration`.

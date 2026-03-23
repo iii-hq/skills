@@ -60,6 +60,10 @@ Use the adaptations below when they apply to the task.
 - For jobs that need state (e.g. last-run timestamp), combine with `state-management`
 - Multiple cron triggers can feed the same queue for fan-in processing
 
+## Engine Configuration
+
+CronModule must be enabled in iii-config.yaml. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
+
 ## Pattern Boundaries
 
 - If the task is about one-off async work rather than recurring schedules, prefer `queue-processing`.
