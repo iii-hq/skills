@@ -321,8 +321,8 @@ modules:
   # - class: modules::shell::ExecModule
   #   config:
   #     watch:
-  #       - ./workers/**/*.rs
-  #       - ./src/**/*.rs
+  #       - workers/**/*.rs
+  #       - src/**/*.rs
   #     exec:
   #       - cargo run --build my-rust-worker
   #
@@ -330,8 +330,8 @@ modules:
   # - class: modules::shell::ExecModule
   #   config:
   #     watch:
-  #       - ./workers/**/*.py
-  #       - ./src/**/*.py
+  #       - workers/**/*.py
+  #       - src/**/*.py
   #     exec:
   #       - uv run ./src/my_python_worker.py
   #
@@ -339,10 +339,10 @@ modules:
   # - class: modules::shell::ExecModule
   #   config:
   #     watch:
-  #       - ./workers/**/*.ts
-  #       - ./src/**/*.ts
-  #       - ./workers/**/*.js
-  #       - ./src/**/*.js
+  #       - workers/**/*.ts
+  #       - src/**/*.ts
+  #       - workers/**/*.js
+  #       - src/**/*.js
   #     exec:
   #       - pnpm dev:my-node-worker
   #
@@ -350,8 +350,8 @@ modules:
   # - class: modules::shell::ExecModule
   #   config:
   #     watch:
-  #       - ./steps/**/*.ts
-  #       - ./steps/**/*.py
+  #       - steps/**/*.ts
+  #       - steps/**/*.py
   #     exec:
   #       - npx motia-node
 
