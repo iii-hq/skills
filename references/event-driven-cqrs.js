@@ -3,16 +3,16 @@
  * Comparable to: Kafka, RabbitMQ, CQRS/Event Sourcing systems
  *
  * Demonstrates CQRS (Command Query Responsibility Segregation) with
- * event sourcing. Commands publish domain events via pubsub. Multiple
- * read model projections subscribe independently. PubSub handles all
- * fan-out — both to projections and downstream notification consumers.
+ * event sourcing. Commands emit domain events via topic-based queues.
+ * Multiple read model projections consume topics independently. Named
+ * queues handle dedicated alert delivery workloads.
  *
  * How-to references:
  *   - Queues:           https://iii.dev/docs/how-to/use-queues
  *   - State management: https://iii.dev/docs/how-to/manage-state
  *   - State reactions:  https://iii.dev/docs/how-to/react-to-state-changes
  *   - HTTP endpoints:   https://iii.dev/docs/how-to/expose-http-endpoint
- *   - PubSub:           https://iii.dev/docs/how-to/use-functions-and-triggers
+ *   - Functions/Triggers: https://iii.dev/docs/how-to/use-functions-and-triggers
  */
 
 import { registerWorker, Logger, TriggerAction } from 'iii-sdk'
@@ -48,8 +48,11 @@ iii.registerFunction({ id: 'cmd::add-inventory-item' }, async (data) => {
 
   await appendEvent('inventory', sku, event)
 
-  // Publish domain event for all projections to consume
-  iii.trigger({ function_id: 'publish', payload: { topic: 'inventory.item-added', data: event }, action: TriggerAction.Void() })
+  // Emit domain event for all topic queue consumers to process
+  await iii.trigger({
+    function_id: 'enqueue',
+    payload: { topic: 'inventory.item-added', data: event },
+  })
 
   return { event: 'ItemAdded', sku }
 })
@@ -76,7 +79,10 @@ iii.registerFunction({ id: 'cmd::sell-item' }, async (data) => {
 
   await appendEvent('inventory', sku, event)
 
-  iii.trigger({ function_id: 'publish', payload: { topic: 'inventory.item-sold', data: event }, action: TriggerAction.Void() })
+  await iii.trigger({
+    function_id: 'enqueue',
+    payload: { topic: 'inventory.item-sold', data: event },
+  })
 
   return { event: 'ItemSold', sku, remaining: item.stock - quantity }
 })
@@ -145,31 +151,32 @@ iii.registerFunction({ id: 'proj::sales-analytics' }, async (event) => {
   } })
 })
 
-// Projections subscribe to domain events independently via pubsub
-iii.registerTrigger({ type: 'subscribe', function_id: 'proj::catalog-on-add', config: { topic: 'inventory.item-added' } })
-iii.registerTrigger({ type: 'subscribe', function_id: 'proj::catalog-on-sell', config: { topic: 'inventory.item-sold' } })
-iii.registerTrigger({ type: 'subscribe', function_id: 'proj::sales-analytics', config: { topic: 'inventory.item-sold' } })
+// Projections consume domain events independently via queue topic triggers
+iii.registerTrigger({ type: 'queue', function_id: 'proj::catalog-on-add', config: { topic: 'inventory.item-added' } })
+iii.registerTrigger({ type: 'queue', function_id: 'proj::catalog-on-sell', config: { topic: 'inventory.item-sold' } })
+iii.registerTrigger({ type: 'queue', function_id: 'proj::sales-analytics', config: { topic: 'inventory.item-sold' } })
 
 // ===================================================================
-// FAN-OUT — PubSub notifications to downstream systems
+// FAN-OUT — mixed queue patterns for downstream systems
 // ===================================================================
 iii.registerFunction({ id: 'notify::low-stock-alert' }, async (event) => {
   const item = await iii.trigger({ function_id: 'state::get', payload: { scope: 'inventory-read', key: event.sku } })
   if (item && item.stock <= 5) {
-    iii.trigger({ function_id: 'publish', payload: {
-      topic: 'alerts.low-stock',
-      data: { sku: event.sku, name: item.name, remaining: item.stock },
-    }, action: TriggerAction.Void() })
+    await iii.trigger({
+      function_id: 'notify::slack-low-stock',
+      payload: { sku: event.sku, name: item.name, remaining: item.stock },
+      action: TriggerAction.Enqueue({ queue: 'alerts-notify' }),
+    })
   }
 })
 
 iii.registerTrigger({
-  type: 'subscribe',
+  type: 'queue',
   function_id: 'notify::low-stock-alert',
   config: { topic: 'inventory.item-sold' },
 })
 
-// Fan-out subscriber: could be a separate service listening for alerts
+// Named queue worker: could be a separate service notifying Slack/email/pager
 iii.registerFunction({ id: 'notify::slack-low-stock' }, async (data) => {
   const logger = new Logger()
   logger.warn('LOW STOCK ALERT', { sku: data.sku, remaining: data.remaining })
@@ -177,9 +184,9 @@ iii.registerFunction({ id: 'notify::slack-low-stock' }, async (data) => {
 })
 
 iii.registerTrigger({
-  type: 'subscribe',
+  type: 'queue',
   function_id: 'notify::slack-low-stock',
-  config: { topic: 'alerts.low-stock' },
+  config: { queue: 'alerts-notify' },
 })
 
 // ===================================================================
