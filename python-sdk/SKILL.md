@@ -21,7 +21,7 @@ Full API reference: <https://iii.dev/docs/api-reference/sdk-python>
 
 | Export                                        | Purpose                                         |
 | --------------------------------------------- | ----------------------------------------------- |
-| `init(address, options?)`                     | Connect to the engine inside an async context   |
+| `register_worker(address, options?)`          | Connect to the engine, returns the client       |
 | `InitOptions(worker_name, otel?)`             | Connection configuration                        |
 | `register_function(id, handler)`              | Register an async function handler              |
 | `register_trigger(type, function_id, config)` | Bind a trigger to a function                    |
@@ -35,7 +35,7 @@ Full API reference: <https://iii.dev/docs/api-reference/sdk-python>
 
 ## Key Notes
 
-- `init()` must be called inside an `async def` — it requires a running event loop
+- `register_worker()` returns a synchronous client; handlers are async
 - `ApiResponse` uses camelCase `statusCode` (pydantic alias), not `status_code`
 - End workers with `while True: await asyncio.sleep(60)` to keep the event loop alive
 - Use `asyncio.to_thread()` for CPU-heavy sync work inside handlers

@@ -22,13 +22,13 @@ Use the concepts below when they fit the task. Not every worker needs all of the
 
 ## Architecture
 
-SDK init connects the worker to the engine, `registerFunction` defines handlers, `registerTrigger` binds event sources to those handlers, and the engine routes incoming events to the correct function. Functions can invoke other functions across workers and languages via `trigger()`.
+`registerWorker()` connects the worker to the engine, `registerFunction` defines handlers, `registerTrigger` binds event sources to those handlers, and the engine routes incoming events to the correct function. Functions can invoke other functions across workers and languages via `trigger()`.
 
 ## iii Primitives Used
 
 | Primitive                                                    | Purpose                            |
 | ------------------------------------------------------------ | ---------------------------------- |
-| `init(url)`                                                  | Connect worker to engine           |
+| `registerWorker(url, options?)`                              | Connect worker to engine           |
 | `registerFunction({ id }, handler)`                          | Define a function handler          |
 | `registerTrigger({ type, function_id, config })`             | Bind an event source to a function |
 | `trigger({ function_id, payload })`                          | Invoke a function synchronously    |
@@ -37,14 +37,17 @@ SDK init connects the worker to the engine, `registerFunction` defines handlers,
 
 ## Reference Implementation
 
-See [../references/functions-and-triggers.js](../references/functions-and-triggers.js) for the full working example — a multi-language worker setup
-showing function registration, trigger binding, and cross-function invocation patterns in TypeScript, Python, and Rust.
+- **TypeScript**: [../references/functions-and-triggers.js](../references/functions-and-triggers.js)
+- **Python**: [../references/functions-and-triggers.py](../references/functions-and-triggers.py)
+- **Rust**: [../references/functions-and-triggers.rs](../references/functions-and-triggers.rs)
+
+Each reference shows the same patterns (function registration, trigger binding, cross-function invocation) in its respective language.
 
 ## Common Patterns
 
 Code using this pattern commonly includes, when relevant:
 
-- `init('ws://localhost:49134')` — connect to the engine
+- `registerWorker('ws://localhost:49134', { workerName: 'my-worker' })` — connect to the engine
 - `registerFunction({ id: 'namespace::name' }, async (input) => { ... })` — register a handler
 - `registerTrigger({ type: 'http', function_id, config: { api_path, http_method } })` — HTTP trigger
 - `registerTrigger({ type: 'queue', function_id, config: { topic } })` — queue trigger
