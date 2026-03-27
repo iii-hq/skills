@@ -72,8 +72,13 @@ async def consume(data):
 
     # Read entire binary stream
     raw = await reader.read_all()
-    lines = raw.decode("utf-8").strip().split("\n")
-    records = [json.loads(line) for line in lines]
+    decoded = raw.decode("utf-8").strip()
+    
+    if not decoded:
+        records = []
+    else:
+        lines = decoded.split("\n")
+        records = [json.loads(line) for line in lines if line.strip()]
 
     logger.info("Consumer processed records", {"count": len(records)})
     return {"processed": len(records)}

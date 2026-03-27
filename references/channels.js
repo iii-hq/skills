@@ -69,8 +69,15 @@ iii.registerFunction({ id: 'pipeline::consume' }, async (data) => {
 
   // Read entire binary stream
   const buffer = await reader.readAll()
-  const lines = buffer.toString('utf-8').trim().split('\n')
-  const records = lines.map((line) => JSON.parse(line))
+  const text = buffer.toString('utf-8').trim()
+  
+  let records
+  if (!text) {
+    records = [{ processed: 0 }]
+  } else {
+    const lines = text.split('\n').filter((line) => line.trim() !== '')
+    records = lines.map((line) => JSON.parse(line))
+  }
 
   logger.info('Consumer processed records', { count: records.length })
   return { processed: records.length }

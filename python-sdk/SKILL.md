@@ -39,6 +39,23 @@ Full API reference: <https://iii.dev/docs/api-reference/sdk-python>
 - `ApiResponse` uses camelCase `statusCode` (pydantic alias), not `status_code`
 - End workers with `while True: await asyncio.sleep(60)` to keep the event loop alive
 - Use `asyncio.to_thread()` for CPU-heavy sync work inside handlers
+- The SDK implements both `trigger_async(request)` and a synchronous `trigger(request)`. Use `trigger_async` inside async handlers, and `trigger` in synchronous scripts or threads where blocking behavior is desired.
+
+## Examples
+
+```python
+# Async invocation (non-blocking, typical inside handlers)
+result = await iii.trigger_async({
+    "function_id": "greet",
+    "payload": {"name": "World"}
+})
+
+# Sync invocation (blocks the current thread, useful in sync contexts)
+result = iii.trigger({
+    "function_id": "greet",
+    "payload": {"name": "World"}
+})
+```
 
 ## Pattern Boundaries
 

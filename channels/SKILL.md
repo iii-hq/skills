@@ -18,7 +18,8 @@ Use the concepts below when they fit the task. Not every worker needs channels.
 - `createChannel()` returns a writer/reader pair plus serializable refs that can be passed to other workers
 - **StreamChannelRef** is a serializable reference (channel_id, access_key, direction) that can be included in function payloads
 - Writers send binary data (chunked into 64KB frames) and text messages
-- Readers consume binary chunks via async iteration and receive text messages via callbacks
+- Readers consume binary chunks via `readAll()` or receive text messages via callbacks
+- Consumers must construct a reader from a serializable `StreamChannelRef` (e.g., `ChannelReader::new(...)`) rather than using the producer-side reader object returned by `createChannel()`
 - Channels work cross-worker and cross-language — a Python writer can stream to a Rust reader
 
 ## Architecture
@@ -49,13 +50,14 @@ Each reference shows the same patterns (channel creation, binary streaming, text
 
 Code using this pattern commonly includes, when relevant:
 
-- `const channel = await iii.createChannel()` — create a channel pair
+- `const channel = await iii.createChannel()` — create a channel pair (producer access)
 - `channel.writer.stream.write(buffer)` / `channel.writer.write(data)` — send binary data
 - `channel.writer.sendMessage(JSON.stringify({ type: 'metadata', ... }))` — send text metadata
 - `channel.writer.close()` — signal end of stream
-- `const data = await channel.reader.readAll()` — read entire stream
-- `channel.reader.onMessage(msg => { ... })` — handle text messages
 - Pass `channel.readerRef` or `channel.writerRef` in trigger payloads for cross-worker streaming
+- Consumer must reconstruct the reader from the ref: e.g., `new ChannelReader(iii.address, readerRef)`
+- `const data = await reader.readAll()` — read entire stream (consumer behavior)
+- `reader.onMessage(msg => { ... })` — handle text messages (consumer behavior)
 
 ## Adapting This Pattern
 

@@ -117,7 +117,7 @@ async def create_order(data):
     # Synchronous call — blocks until validate returns
     validation = await iii.trigger_async({
         "function_id": "orders::validate",
-        "payload": {"order_id": data["order_id"], "items": data["items"]},
+        "payload": {"order_id": data.get("order_id"), "items": data.get("items")},
     })
 
     if not validation.get("valid"):
@@ -126,18 +126,18 @@ async def create_order(data):
     # Fire-and-forget — send a notification without waiting
     await iii.trigger_async({
         "function_id": "notifications::on-order-complete",
-        "payload": {"order_id": data["order_id"]},
+        "payload": {"order_id": data.get("order_id")},
         "action": TriggerAction.Void(),
     })
 
     # Enqueue — durable async handoff to fulfillment
     await iii.trigger_async({
         "function_id": "orders::fulfill",
-        "payload": {"order_id": data["order_id"], "items": data["items"]},
+        "payload": {"order_id": data.get("order_id"), "items": data.get("items")},
         "action": TriggerAction.Enqueue({"queue": "fulfillment"}),
     })
 
-    return {"order_id": data["order_id"], "status": "accepted"}
+    return {"order_id": data.get("order_id"), "status": "accepted"}
 
 iii.register_function("orders::create", create_order)
 

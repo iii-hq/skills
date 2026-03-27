@@ -41,7 +41,7 @@ The iii-config.yaml file is loaded by the iii engine binary at startup. Modules 
 | `modules::shell::ExecModule`                   | Spawn external processes               |
 | `modules::bridge_client::BridgeClientModule`   | Distributed cross-engine invocation    |
 | `modules::telemetry::TelemetryModule`          | Anonymous product analytics            |
-| `workers` section in config.yaml               | External binary workers (worker modules)|
+| `workers` section in iii-config.yaml               | External binary workers (worker modules)|
 | `iii.toml`                                     | Worker manifest (name → version)       |
 | `iii worker add NAME[@VERSION]`                | Install a worker from the registry     |
 | `iii worker remove NAME`                       | Uninstall a worker                     |
@@ -69,7 +69,7 @@ Code using this pattern commonly includes, when relevant:
 
 ### Worker Module System
 
-External workers are installed via the CLI and configured in `config.yaml`:
+External workers are installed via the CLI and configured in `iii-config.yaml`:
 
 - `iii worker add pdfkit@1.0.0` — install a worker binary from the registry
 - `iii worker add` (no name) — install all workers listed in `iii.toml`
@@ -83,7 +83,7 @@ pdfkit = "1.0.0"
 image-processor = "2.3.1"
 ```
 
-Worker config blocks in `config.yaml` use marker comments for automatic management:
+Worker config blocks in `iii-config.yaml` use marker comments for automatic management:
 ```yaml
 workers:
   # === iii:pdfkit BEGIN ===

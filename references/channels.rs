@@ -42,14 +42,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 // Create a channel pair
                 let channel = iii.create_channel(None).await.map_err(|e| e.to_string())?;
 
-                // Pass the reader ref to the consumer via trigger
+                // Pass the reader ref to the consumer via trigger without waiting
                 iii.trigger(TriggerRequest {
                     function_id: "pipeline::consume".into(),
                     payload: json!({
                         "reader_ref": channel.reader_ref,
                         "record_count": input.records.len(),
                     }),
-                    action: None,
+                    action: Some(TriggerAction::Void),
                     timeout_ms: None,
                 })
                 .await
