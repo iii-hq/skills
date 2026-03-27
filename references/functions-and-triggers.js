@@ -3,7 +3,7 @@
  * Comparable to: Core primitives of iii
  *
  * Demonstrates every fundamental building block: registering functions,
- * binding triggers of each built-in type (http, queue, cron, state, subscribe),
+ * binding triggers of each built-in type (http, queue, cron, state, stream),
  * cross-function invocation, fire-and-forget calls, and external HTTP-invoked
  * functions via HttpInvocationConfig.
  *
@@ -86,7 +86,7 @@ iii.registerTrigger({
 })
 
 // ---------------------------------------------------------------------------
-// 6. Subscribe trigger — listen for pubsub messages on a topic
+// 6. Queue trigger (topic-based mode) — consume events by topic
 // ---------------------------------------------------------------------------
 iii.registerFunction({ id: 'notifications::on-order-complete' }, async (data) => {
   const logger = new Logger()
@@ -95,7 +95,7 @@ iii.registerFunction({ id: 'notifications::on-order-complete' }, async (data) =>
 })
 
 iii.registerTrigger({
-  type: 'subscribe',
+  type: 'queue',
   function_id: 'notifications::on-order-complete',
   config: { topic: 'orders.completed' },
 })
@@ -116,11 +116,13 @@ iii.registerFunction({ id: 'orders::create' }, async (data) => {
     return { error: validation.reason }
   }
 
-  // Fire-and-forget — send a notification without waiting
-  iii.trigger({
-    function_id: 'notifications::on-order-complete',
-    payload: { order_id: data.order_id },
-    action: TriggerAction.Void(),
+  // Topic-based queue emit — any queue trigger on this topic receives the event
+  await iii.trigger({
+    function_id: 'enqueue',
+    payload: {
+      topic: 'orders.completed',
+      data: { order_id: data.order_id },
+    },
   })
 
   // Enqueue — durable async handoff to fulfillment

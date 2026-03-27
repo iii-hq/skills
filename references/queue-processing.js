@@ -27,6 +27,45 @@ const iii = registerWorker(process.env.III_ENGINE_URL || 'ws://localhost:49134',
 })
 
 // ---------------------------------------------------------------------------
+// Topic-based queue mode
+// Producer emits by topic and any queue-trigger subscribers on that topic receive it.
+// ---------------------------------------------------------------------------
+iii.registerFunction({ id: 'orders::emit-created' }, async (data) => {
+  const logger = new Logger()
+
+  const result = await iii.trigger({
+    function_id: 'enqueue',
+    payload: {
+      topic: 'orders.created',
+      data: {
+        orderId: data.orderId,
+        customerId: data.customerId,
+        total: data.total,
+      },
+    },
+  })
+
+  logger.info('Order event enqueued by topic', {
+    orderId: data.orderId,
+    messageReceiptId: result.messageReceiptId,
+  })
+
+  return { status: 'queued', messageReceiptId: result.messageReceiptId }
+})
+
+iii.registerFunction({ id: 'orders::on-created' }, async (data) => {
+  const logger = new Logger()
+  logger.info('Handling order topic event', { orderId: data.orderId })
+  return { handled: true, orderId: data.orderId }
+})
+
+iii.registerTrigger({
+  type: 'queue',
+  function_id: 'orders::on-created',
+  config: { topic: 'orders.created' },
+})
+
+// ---------------------------------------------------------------------------
 // Enqueue work — standard queue (concurrent processing)
 // ---------------------------------------------------------------------------
 iii.registerFunction({ id: 'payments::submit' }, async (data) => {

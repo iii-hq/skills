@@ -15,16 +15,24 @@ Comparable to: BullMQ, Celery, SQS
 
 Use the concepts below when they fit the task. Not every queue setup needs all of them.
 
+- **Topic-based queues** route by `topic` and are triggered via `function_id: 'enqueue'`
 - **Named queues** are declared in `iii-config.yaml` under `queue_configs`
 - **Standard queues** process jobs concurrently; **FIFO queues** preserve ordering
 - `TriggerAction.Enqueue({ queue })` dispatches a job to a named queue
+- `trigger({ function_id: 'enqueue', payload: { topic, data } })` dispatches by topic
 - Failed jobs **auto-retry** with exponential backoff up to `max_retries`
 - Jobs that exhaust retries land in a **dead letter queue** for inspection
 - Each consumer function receives the job payload and a `messageReceiptId`
 
 ## Architecture
 
-    Producer function
+    Producer function (topic-based)
+      → trigger({ function_id: 'enqueue', payload: { topic, data } })
+        → Topic queue consumer(s)
+          → success / retry with backoff
+            → Dead Letter Queue (after max_retries)
+
+    Producer function (named queue)
       → TriggerAction.Enqueue({ queue: 'task-queue' })
         → Named Queue (standard or FIFO)
           → Consumer registerFunction handler
@@ -35,10 +43,12 @@ Use the concepts below when they fit the task. Not every queue setup needs all o
 
 | Primitive                                                    | Purpose                                        |
 | ------------------------------------------------------------ | ---------------------------------------------- |
-| `registerFunction`                                           | Define the consumer that processes jobs        |
-| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Dispatch a job to a named queue                |
-| `messageReceiptId`                                           | Acknowledge or track individual job processing |
-| `queue_configs` in `iii-config.yaml`                         | Declare queues with concurrency and retries    |
+| `registerFunction`                                           | Define consumers that process jobs             |
+| `registerTrigger({ type: 'queue', config: { topic } })`      | Bind a function to a topic-based queue         |
+| `trigger({ function_id: 'enqueue', payload: { topic, data } })` | Dispatch by topic                            |
+| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Dispatch to a named queue                      |
+| `messageReceiptId`                                           | Track individual job enqueue/processing        |
+| `queue_configs` in `iii-config.yaml`                         | Tune named queues (retry, concurrency, type)   |
 
 ## Reference Implementation
 
@@ -50,6 +60,8 @@ Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `registerFunction(id, handler)` — define the consumer
+- `registerTrigger({ type: 'queue', function_id, config: { topic } })` — topic queue consumer binding
+- `trigger({ function_id: 'enqueue', payload: { topic, data } })` — topic queue dispatch
 - `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — enqueue a job
 - `payload.messageReceiptId` — track or acknowledge the job
 - `trigger({ function_id: 'state::set', payload })` — persist results after processing
@@ -59,10 +71,18 @@ Code using this pattern commonly includes, when relevant:
 
 Use the adaptations below when they apply to the task.
 
+- Choose topic-based queues when producers only know an event topic and many consumers can bind independently
+- Choose named queues when you want explicit workload queues and per-queue tuning in `queue_configs`
 - Choose FIFO queues when job ordering matters (e.g. sequential pipeline steps)
 - Set `max_retries` and `concurrency` in queue config to match your workload
 - Chain multiple queues for multi-stage pipelines (queue A consumer enqueues to queue B)
 - For idempotency, check state before processing to avoid duplicate work on retries
+
+## When To Choose Which
+
+- **Topic-based queues**: use when producers emit events by semantic topic and consumers bind independently to those topics.
+- **Named queues**: use when producers explicitly target workload queues with dedicated retry/concurrency/FIFO tuning.
+- **Hybrid**: use topic-based edges for event fanout and named queues for heavy or side-effecting downstream workloads.
 
 ## Engine Configuration
 

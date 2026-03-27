@@ -3,8 +3,8 @@ name: event-driven-cqrs
 description: >-
   Implements CQRS with event sourcing on the iii engine. Use when building
   command/query separation, event-sourced systems, or fan-out architectures
-  where commands publish domain events and multiple read model projections
-  subscribe independently.
+  where commands emit domain events to queue topics and multiple read model
+  projections consume independently.
 ---
 
 # Event-Driven CQRS & Event Sourcing
@@ -15,10 +15,11 @@ Comparable to: Kafka, RabbitMQ, CQRS/Event Sourcing systems
 
 Use the concepts below when they fit the task. Not every CQRS system needs all of them.
 
-- **Write side**: Commands validate input and publish domain events via pubsub
-- **Read side**: Multiple projections subscribe to events independently, building query-optimized views in state
+- **Write side**: Commands validate input and emit domain events to queue topics
+- **Read side**: Multiple projections consume events independently, building query-optimized views in state
 - **Event log**: Events are appended to state as an ordered log (event sourcing)
-- **PubSub** handles fan-out — one event reaches all projections and downstream consumers
+- **Topic-based queues** handle fan-out across independently bound consumers
+- **Named queues** handle dedicated workloads (alerts, notifications, heavy compute)
 - **HTTP triggers** expose both command endpoints (POST) and query endpoints (GET)
 
 ## Architecture
@@ -26,8 +27,8 @@ Use the concepts below when they fit the task. Not every CQRS system needs all o
 ```text
 HTTP POST /inventory (command)
   → cmd::add-inventory-item → validate → append event to state
-    → publish('inventory.item-added')
-      ↓ (fan-out via subscribe triggers)
+    → enqueue(topic='inventory.item-added')
+      ↓ (fan-out via queue topic triggers)
       → proj::inventory-list (updates queryable list view)
       → proj::inventory-stats (updates aggregate counters)
       → notify::inventory-alert (sends low-stock alerts)
@@ -43,15 +44,16 @@ HTTP GET /inventory (query)
 | `registerWorker`                                            | Initialize the worker and connect to iii  |
 | `registerFunction`                                          | Define commands, projections, and queries |
 | `trigger({ function_id: 'state::set/get/list', payload })`  | Event log and projection state            |
-| `trigger({ function_id: 'publish', payload })`              | Publish domain events                     |
-| `registerTrigger({ type: 'subscribe', config: { topic } })` | Subscribe projections to events           |
+| `trigger({ function_id: 'enqueue', payload: { topic, data } })` | Emit domain events by topic queue     |
+| `registerTrigger({ type: 'queue', config: { topic } })`      | Bind projections to event topic queues    |
+| `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Dispatch dedicated work to named queues   |
 | `registerTrigger({ type: 'http' })`                         | Command and query endpoints               |
-| `trigger({ ..., action: TriggerAction.Void() })`            | Fire-and-forget notifications             |
+| `trigger({ ..., action: TriggerAction.Void() })`            | Optional non-critical side effects        |
 
 ## Reference Implementation
 
 See [../references/event-driven-cqrs.js](../references/event-driven-cqrs.js) for the full working example — an inventory management system
-with commands that publish domain events and multiple projections building query-optimized views.
+with commands that emit domain events through queue topics and multiple projections building query-optimized views.
 
 ## Common Patterns
 
@@ -59,21 +61,27 @@ Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `trigger({ function_id: 'state::set', payload: { scope: 'events', key, value } })` — event log append
-- `trigger({ function_id: 'publish', payload: { topic, data } })` — domain event publishing
-- `registerTrigger({ type: 'subscribe', function_id, config: { topic } })` — projection subscriptions
+- `trigger({ function_id: 'enqueue', payload: { topic, data } })` — domain event enqueue by topic
+- `registerTrigger({ type: 'queue', function_id, config: { topic } })` — projection topic queue bindings
+- `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — named queue handoff
 - Command functions with `cmd::` prefix, projection functions with `proj::` prefix, query functions with `query::` prefix
-- Multiple projections subscribing to the same topic independently
+- Multiple projections consuming the same topic independently
 - `const logger = new Logger()` — structured logging per command/projection
 
 ## Adapting This Pattern
 
 Use the adaptations below when they apply to the task.
 
-- Add new projections by registering subscribe triggers on existing event topics
+- Add new projections by registering queue topic triggers on existing event topics
 - Use separate state scopes for each projection (e.g. `inventory-list`, `inventory-stats`)
-- Commands should validate before publishing — reject invalid commands early
-- For critical event processing, use `TriggerAction.Enqueue({ queue })` instead of pubsub for guaranteed delivery
+- Commands should validate before enqueueing events — reject invalid commands early
+- Use named queues for slow downstream workloads (alerts, webhooks, notifications)
 - Event IDs should be unique and monotonic for ordering (e.g. `evt-${Date.now()}-${counter}`)
+
+## Queue Mode Choice
+
+- **Topic-based queues** for domain events and independent projection fanout.
+- **Named queues** for bounded worker pools where retry/concurrency/FIFO are tuned per workload.
 
 ## Pattern Boundaries
 

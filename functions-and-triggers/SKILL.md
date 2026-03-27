@@ -19,6 +19,7 @@ Use the concepts below when they fit the task. Not every worker needs all of the
 - Functions invoke other functions via `trigger()` regardless of language or worker location
 - The engine handles serialization, routing, and delivery automatically
 - HTTP-invoked functions wrap external endpoints as callable function IDs
+- Queue triggers can be bound by `topic` (topic-based queues) or by named `queue` depending on pattern
 
 ## Architecture
 
@@ -32,6 +33,7 @@ SDK init connects the worker to the engine, `registerFunction` defines handlers,
 | `registerFunction({ id }, handler)`                          | Define a function handler          |
 | `registerTrigger({ type, function_id, config })`             | Bind an event source to a function |
 | `trigger({ function_id, payload })`                          | Invoke a function synchronously    |
+| `trigger({ function_id: 'enqueue', payload: { topic, data } })` | Topic-based queue dispatch      |
 | `trigger({ ..., action: TriggerAction.Void() })`             | Fire-and-forget invocation         |
 | `trigger({ ..., action: TriggerAction.Enqueue({ queue }) })` | Durable async invocation via queue |
 
@@ -47,11 +49,13 @@ Code using this pattern commonly includes, when relevant:
 - `init('ws://localhost:49134')` — connect to the engine
 - `registerFunction({ id: 'namespace::name' }, async (input) => { ... })` — register a handler
 - `registerTrigger({ type: 'http', function_id, config: { api_path, http_method } })` — HTTP trigger
-- `registerTrigger({ type: 'queue', function_id, config: { topic } })` — queue trigger
+- `registerTrigger({ type: 'queue', function_id, config: { topic } })` — topic-based queue trigger
+- `registerTrigger({ type: 'queue', function_id, config: { queue } })` — named queue trigger
 - `registerTrigger({ type: 'cron', function_id, config: { expression } })` — cron trigger
 - `registerTrigger({ type: 'state', function_id, config: { scope, key } })` — state change trigger
 - `registerTrigger({ type: 'stream', function_id, config: { stream } })` — stream trigger
 - `registerTrigger({ type: 'subscribe', function_id, config: { topic } })` — pubsub subscriber
+- `trigger({ function_id: 'enqueue', payload: { topic, data } })` — topic queue publish
 - Cross-language invocation: a TypeScript function can trigger a Python or Rust function by ID
 
 ## Adapting This Pattern
@@ -61,9 +65,15 @@ Use the adaptations below when they apply to the task.
 - Replace placeholder handler logic with real business logic (API calls, DB queries, LLM calls)
 - Use `namespace::name` convention for function IDs to group related functions
 - For HTTP endpoints, configure `api_path` and `http_method` in the trigger config
+- For topic-based queue fanout, use `function_id: 'enqueue'` and bind consumers with `type: 'queue'` + `config.topic`
 - For durable async work, use `TriggerAction.Enqueue({ queue })` instead of synchronous trigger
 - For fire-and-forget side effects, use `TriggerAction.Void()`
 - Multiple workers in different languages can register functions that invoke each other by ID
+
+## Queue Mode Choice
+
+- **Topic-based queue mode**: bind consumers with `registerTrigger({ type: 'queue', config: { topic } })` and emit with `function_id: 'enqueue'`.
+- **Named queue mode**: dispatch directly with `TriggerAction.Enqueue({ queue })` when producers target explicit workload queues.
 
 ## Pattern Boundaries
 
