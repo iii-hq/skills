@@ -59,7 +59,7 @@ iii.registerFunction({ id: 'pipeline::consume' }, async (data) => {
   const logger = new Logger()
 
   // Reconstruct reader from the ref passed in the payload
-  const reader = iii.createChannelReader(data.readerRef)
+  const reader = data.readerRef
 
   // Listen for text messages (metadata, signaling)
   reader.onMessage((msg) => {

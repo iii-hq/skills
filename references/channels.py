@@ -31,10 +31,10 @@ async def produce(data):
     channel = await iii.create_channel_async()
 
     # Pass the reader ref to the consumer via trigger
-    await iii.trigger({
+    await iii.trigger_async({
         "function_id": "pipeline::consume",
         "payload": {
-            "reader_ref": channel.reader_ref.__dict__,
+            "reader_ref": channel.reader_ref,
             "record_count": len(data.get("records", [])),
         },
     })
@@ -63,8 +63,8 @@ iii.register_function("pipeline::produce", produce)
 async def consume(data):
     logger = Logger(service_name="pipeline::consume")
 
-    # Reconstruct reader from the ref passed in the payload
-    reader = iii.create_channel_reader(data["reader_ref"])
+    # The reader ref is automatically resolved to a ChannelReader instance
+    reader = data["reader_ref"]
 
     # Listen for text messages (metadata, signaling)
     messages = []

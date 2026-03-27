@@ -25,8 +25,8 @@ Full API reference: <https://iii.dev/docs/api-reference/sdk-python>
 | `InitOptions(worker_name, otel?)`             | Connection configuration                        |
 | `register_function(id, handler)`              | Register an async function handler              |
 | `register_trigger(type, function_id, config)` | Bind a trigger to a function                    |
-| `trigger(function_id, payload)`               | Invoke a function (async)                       |
-| `trigger_void(function_id, payload)`          | Fire-and-forget invocation                      |
+| `trigger(request)`                            | Invoke a function synchronously                 |
+| `trigger_async(request)`                      | Invoke a function asynchronously                |
 | `get_context()`                               | Access logger and trace context inside handlers |
 | `ApiRequest` / `ApiResponse`                  | HTTP request/response types (pydantic)          |
 | `IStream`                                     | Interface for custom stream implementations     |
