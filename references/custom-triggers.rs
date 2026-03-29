@@ -60,6 +60,8 @@ impl TriggerHandler for WebhookTriggerHandler {
         Ok(())
     }
 
+    // NOTE: In production, an HTTP listener would match incoming requests
+    // to endpoints and call iii.trigger(endpoint.function_id, payload)
     async fn unregister_trigger(&self, config: TriggerConfig) -> Result<(), String> {
         self.endpoints.lock().await.remove(&config.id);
         Ok(())
@@ -86,11 +88,11 @@ impl TriggerHandler for PollingTriggerHandler {
             .and_then(|v| v.as_str())
             .ok_or("missing url in config")?
             .to_string();
-        let interval_ms = config
-            .config
-            .get("interval_ms")
-            .and_then(|v| v.as_u64())
-            .unwrap_or(30000);
+        let interval_ms = match config.config.get("interval_ms").and_then(|v| v.as_u64()) {
+            Some(0) => return Err("interval_ms must be greater than 0".into()),
+            Some(ms) => ms,
+            None => 30_000,
+        };
 
         let iii = self.iii.clone();
 
@@ -106,7 +108,14 @@ impl TriggerHandler for PollingTriggerHandler {
 
                 match req.send().await {
                     Ok(resp) => {
-                        if resp.status().as_u16() == 304 {
+                        let status = resp.status().as_u16();
+
+                        if status == 304 {
+                            tokio::time::sleep(Duration::from_millis(interval_ms)).await;
+                            continue;
+                        }
+
+                        if !(200..300).contains(&status) {
                             tokio::time::sleep(Duration::from_millis(interval_ms)).await;
                             continue;
                         }
@@ -118,10 +127,8 @@ impl TriggerHandler for PollingTriggerHandler {
                             .map(|s| s.to_string());
 
                         if etag.is_some() && etag != last_etag {
-                            last_etag = etag.clone();
-
                             if let Ok(body) = resp.json::<serde_json::Value>().await {
-                                let _ = iii
+                                let result = iii
                                     .trigger(TriggerRequest {
                                         function_id: function_id.clone(),
                                         payload: json!({
@@ -134,6 +141,10 @@ impl TriggerHandler for PollingTriggerHandler {
                                         timeout_ms: None,
                                     })
                                     .await;
+
+                                if result.is_ok() {
+                                    last_etag = etag;
+                                }
                             }
                         }
                     }

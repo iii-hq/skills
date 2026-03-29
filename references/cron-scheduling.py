@@ -126,7 +126,7 @@ async def health_check(data):
         "payload": {"scope": "system", "key": "health"},
     })
 
-    healthy = bool(status)
+    healthy = status.get("healthy", True) if isinstance(status, dict) else True
 
     await iii.trigger_async({
         "function_id": "state::set",

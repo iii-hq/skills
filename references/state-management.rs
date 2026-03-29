@@ -9,10 +9,6 @@ use iii_sdk::{
     builtin_triggers::*, IIITrigger, Logger,
 };
 use serde_json::json;
-use std::time::Duration;
-
-use serde;
-use schemars;
 
 #[derive(serde::Deserialize, schemars::JsonSchema)]
 struct CreateProductInput {

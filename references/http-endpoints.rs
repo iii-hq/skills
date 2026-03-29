@@ -10,10 +10,6 @@ use iii_sdk::{
     builtin_triggers::*, IIITrigger, Logger, ApiRequest,
 };
 use serde_json::json;
-use std::time::Duration;
-
-use serde;
-use schemars;
 
 #[derive(serde::Deserialize, schemars::JsonSchema)]
 struct CreateUserBody {
@@ -35,7 +31,7 @@ fn main() {
             let iii = iii_clone.clone();
             async move {
                 let logger = Logger::new();
-                let id = format!("usr-{}", chrono::Utc::now().timestamp_millis());
+                let id = format!("usr-{:x}", std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos());
 
                 let user = json!({
                     "id": id,
@@ -53,7 +49,7 @@ fn main() {
                 .await
                 .map_err(|e| e.to_string())?;
 
-                logger.info("User created", &json!({ "id": id, "email": req.body.email }));
+                logger.info("User created", &json!({ "event": "user_created", "id": id }));
 
                 Ok(json!({
                     "status_code": 201,
@@ -130,6 +126,11 @@ fn main() {
                 let id = req.path_params.get("id").cloned().unwrap_or_default();
                 let updates = req.body;
 
+                let obj = match updates.as_object() {
+                    Some(o) => o,
+                    None => return Ok(json!({ "status_code": 400, "body": { "error": "Request body must be a JSON object" } })),
+                };
+
                 let existing = iii
                     .trigger(TriggerRequest {
                         function_id: "state::get".into(),
@@ -144,14 +145,12 @@ fn main() {
                     return Ok(json!({ "status_code": 404, "body": { "error": "User not found" } }));
                 }
 
-                let mut ops: Vec<serde_json::Value> = updates
-                    .as_object()
-                    .map(|obj| {
-                        obj.iter()
-                            .map(|(path, value)| json!({ "type": "set", "path": path, "value": value }))
-                            .collect()
-                    })
-                    .unwrap_or_default();
+                const IMMUTABLE_FIELDS: &[&str] = &["id", "created_at"];
+                let mut ops: Vec<serde_json::Value> = obj
+                    .iter()
+                    .filter(|(path, _)| !IMMUTABLE_FIELDS.contains(&path.as_str()))
+                    .map(|(path, value)| json!({ "type": "set", "path": path, "value": value }))
+                    .collect();
 
                 ops.push(json!({ "type": "set", "path": "updated_at", "value": chrono::Utc::now().to_rfc3339() }));
 

@@ -17,7 +17,7 @@ How-to references:
 
 import asyncio
 import os
-import time
+import uuid
 from datetime import datetime, timezone
 
 from iii import InitOptions, Logger, TriggerAction, register_worker
@@ -35,7 +35,7 @@ iii = register_worker(
 
 async def post_message(data):
     logger = Logger()
-    message_id = f"msg-{int(time.time() * 1000)}"
+    message_id = f"msg-{uuid.uuid4().hex}"
 
     await iii.trigger_async({
         "function_id": "stream::set",
@@ -131,7 +131,7 @@ iii.register_function("chat::delete-message", delete_message)
 
 async def broadcast(data):
     logger = Logger()
-    event_id = f"evt-{int(time.time() * 1000)}"
+    event_id = f"evt-{uuid.uuid4().hex}"
 
     await iii.trigger_async({
         "function_id": "stream::set",
@@ -196,7 +196,7 @@ async def presence_join(data):
         "payload": {
             "stream_name": "presence",
             "group_id": data["room"],
-            "id": f"join-{int(time.time() * 1000)}",
+            "id": f"join-{uuid.uuid4().hex}",
             "event_type": "user_joined",
             "data": {"userId": data["userId"], "name": data["name"]},
         },
@@ -223,7 +223,7 @@ async def presence_leave(data):
         "payload": {
             "stream_name": "presence",
             "group_id": data["room"],
-            "id": f"leave-{int(time.time() * 1000)}",
+            "id": f"leave-{uuid.uuid4().hex}",
             "event_type": "user_left",
             "data": {"userId": data["userId"]},
         },

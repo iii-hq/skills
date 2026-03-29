@@ -68,9 +68,14 @@ iii.register_trigger({
 async def submit_payment(data):
     logger = Logger()
 
+    order_id = data.get("order_id") if isinstance(data, dict) else None
+    amount = data.get("amount") if isinstance(data, dict) else None
+    if not order_id or amount is None:
+        return {"status_code": 400, "body": {"error": "order_id and amount required"}}
+
     receipt = await iii.trigger_async({
         "function_id": "payments::charge",
-        "payload": {"order_id": data["order_id"], "amount": data["amount"]},
+        "payload": {"order_id": order_id, "amount": amount},
         "action": TriggerAction.Enqueue({"queue": "payment"}),
     })
 

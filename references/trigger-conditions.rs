@@ -12,14 +12,12 @@ use iii_sdk::{
     builtin_triggers::*, IIITrigger, Logger,
 };
 use serde_json::json;
-use std::time::Duration;
-
-use serde;
-use schemars;
+use chrono::Datelike;
 
 #[derive(serde::Deserialize, schemars::JsonSchema)]
 struct StateChangeEvent {
-    value: Option<serde_json::Value>,
+    new_value: Option<serde_json::Value>,
+    old_value: Option<serde_json::Value>,
     key: String,
 }
 
@@ -47,7 +45,7 @@ fn main() {
     iii.register_function(
         RegisterFunction::new("conditions::is-high-value", |data: StateChangeEvent| -> Result<serde_json::Value, String> {
             let is_high = data
-                .value
+                .new_value
                 .as_ref()
                 .and_then(|v| v["total"].as_f64())
                 .map(|total| total > 500.0)
@@ -63,7 +61,7 @@ fn main() {
             let iii = iii_clone.clone();
             async move {
                 let logger = Logger::new();
-                let total = data.value.as_ref().and_then(|v| v["total"].as_f64()).unwrap_or(0.0);
+                let total = data.new_value.as_ref().and_then(|v| v["total"].as_f64()).unwrap_or(0.0);
                 logger.info("High-value order detected", &json!({ "key": data.key, "total": total }));
 
                 iii.trigger(TriggerRequest {
@@ -117,8 +115,7 @@ fn main() {
         RegisterFunction::new("api::protected-endpoint", |data: HttpRequestEvent| -> Result<serde_json::Value, String> {
             let logger = Logger::new();
             logger.info("Authenticated request", &json!({ "path": data.path }));
-            let api_key = data.headers.as_ref().and_then(|h| h.get("x-api-key")).cloned().unwrap_or_default();
-            Ok(json!({ "message": "Access granted", "user": api_key }))
+            Ok(json!({ "message": "Access granted" }))
         })
         .description("Protected API endpoint"),
     );

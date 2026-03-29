@@ -87,7 +87,7 @@ async def _poll_loop(trigger_id, function_id, url, interval_ms):
             if last_etag:
                 req.add_header("If-None-Match", last_etag)
 
-            resp = urllib.request.urlopen(req)
+            resp = await asyncio.to_thread(urllib.request.urlopen, req)
 
             if resp.status == 304:
                 await asyncio.sleep(interval_s)
