@@ -40,6 +40,7 @@ Use the concepts below when they fit the task. Not every custom trigger needs al
 
 - **TypeScript**: [../references/custom-triggers.js](../references/custom-triggers.js)
 - **Python**: [../references/custom-triggers.py](../references/custom-triggers.py)
+- **Rust**: [../references/custom-triggers.rs](../references/custom-triggers.rs)
 
 ## Common Patterns
 

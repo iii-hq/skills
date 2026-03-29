@@ -70,7 +70,7 @@ Direct mappings to [iii documentation](https://iii.dev/docs) HOWTOs. Each teache
 | [state-management](./state-management)             | Distributed key-value state across functions                             | ✓  | ✓  | ✓  |
 | [state-reactions](./state-reactions)               | Auto-trigger functions on state changes                                  | ✓  | ✓  | ✓  |
 | [realtime-streams](./realtime-streams)             | Push live updates to WebSocket clients                                   | ✓  | ✓  | ✓  |
-| [custom-triggers](./custom-triggers)               | Build custom trigger types for external events                           | ✓  | ✓  |    |
+| [custom-triggers](./custom-triggers)               | Build custom trigger types for external events                           | ✓  | ✓  | ✓  |
 | [trigger-actions](./trigger-actions)               | Synchronous, fire-and-forget, and enqueue invocation modes               | ✓  | ✓  | ✓  |
 | [trigger-conditions](./trigger-conditions)         | Gate trigger execution with condition functions                          | ✓  | ✓  | ✓  |
 | [dead-letter-queues](./dead-letter-queues)         | Inspect and redrive failed queue jobs                                    | ✓  | ✓  | ✓  |
