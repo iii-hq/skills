@@ -164,9 +164,9 @@ iii.registerFunction({ id: 'products::adjust-stock' }, async (data) => {
 // ---------------------------------------------------------------------------
 // HTTP triggers
 // ---------------------------------------------------------------------------
-iii.registerTrigger({ type: 'http', function_id: 'products::create', config: { api_path: '/products', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'products::get', config: { api_path: '/products/:id', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'products::list-all', config: { api_path: '/products', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'products::remove', config: { api_path: '/products/:id', http_method: 'DELETE' } })
-iii.registerTrigger({ type: 'http', function_id: 'products::update-price', config: { api_path: '/products/:id/price', http_method: 'PUT' } })
-iii.registerTrigger({ type: 'http', function_id: 'products::adjust-stock', config: { api_path: '/products/:id/stock', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'products::create', config: { api_path: 'products', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'products::get', config: { api_path: 'products/:id', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'products::list-all', config: { api_path: 'products', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'products::remove', config: { api_path: 'products/:id', http_method: 'DELETE' } })
+iii.registerTrigger({ type: 'http', function_id: 'products::update-price', config: { api_path: 'products/:id/price', http_method: 'PUT' } })
+iii.registerTrigger({ type: 'http', function_id: 'products::adjust-stock', config: { api_path: 'products/:id/stock', http_method: 'POST' } })

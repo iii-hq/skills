@@ -33,11 +33,13 @@ Use the concepts below when they fit the task. Not every HTTP endpoint needs all
 | --------------------------------------------------- | ------------------------------------------ |
 | `registerFunction`                                  | Define the handler for a route             |
 | `registerTrigger({ type: 'http' })`                 | Bind a route path and method to a function |
-| `config: { api_path: '/path', http_method: 'GET' }` | Route configuration on the trigger         |
+| `config: { api_path: 'path', http_method: 'GET' }` | Route configuration on the trigger         |
 
 ## Reference Implementation
 
-See [../references/http-endpoints.js](../references/http-endpoints.js) for the full working example — a REST API with parameterized routes handling GET and POST requests.
+- **TypeScript**: [../references/http-endpoints.js](../references/http-endpoints.js)
+- **Python**: [../references/http-endpoints.py](../references/http-endpoints.py)
+- **Rust**: [../references/http-endpoints.rs](../references/http-endpoints.rs)
 
 ## Common Patterns
 
@@ -66,14 +68,3 @@ Use the adaptations below when they apply to the task.
 - If the task is about calling external HTTP APIs from iii functions, prefer `http-invoked-functions`.
 - If async processing is needed behind the endpoint, prefer `queue-processing` for the background work.
 - Stay with `http-endpoints` when iii owns the route and handles the inbound request directly.
-
-## When to Use
-
-- Use this skill when the task is primarily about `http-endpoints` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

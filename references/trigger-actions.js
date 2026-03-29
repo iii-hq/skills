@@ -153,5 +153,5 @@ iii.registerFunction({ id: 'checkout::process' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'checkout::process',
-  config: { api_path: '/checkout', http_method: 'POST' },
+  config: { api_path: 'checkout', http_method: 'POST' },
 })

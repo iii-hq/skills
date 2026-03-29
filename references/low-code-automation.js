@@ -45,7 +45,7 @@ iii.registerFunction({ id: 'auto::form-webhook' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'auto::form-webhook',
-  config: { api_path: '/webhooks/form', http_method: 'POST' },
+  config: { api_path: 'webhooks/form', http_method: 'POST' },
 })
 
 // Node: Enrich the lead data
@@ -141,5 +141,5 @@ iii.registerFunction({ id: 'auto::daily-digest' }, async () => {
 iii.registerTrigger({
   type: 'cron',
   function_id: 'auto::daily-digest',
-  config: { expression: '0 0 8 * * * *' }, // 8 AM daily
+  config: { cron: '0 0 8 * * * *' }, // 8 AM daily
 })

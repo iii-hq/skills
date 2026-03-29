@@ -79,10 +79,10 @@ iii.registerFunction({ id: 'todos::delete' }, async (data) => {
 })
 
 // HTTP triggers
-iii.registerTrigger({ type: 'http', function_id: 'todos::create', config: { api_path: '/todos', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'todos::list', config: { api_path: '/todos', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'todos::toggle', config: { api_path: '/todos/toggle', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'todos::delete', config: { api_path: '/todos/delete', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'todos::create', config: { api_path: 'todos', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'todos::list', config: { api_path: 'todos', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'todos::toggle', config: { api_path: 'todos/toggle', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'todos::delete', config: { api_path: 'todos/delete', http_method: 'POST' } })
 
 // ---------------------------------------------------------------------------
 // Reactive side effect — push changes to connected clients via stream
@@ -173,5 +173,5 @@ iii.registerFunction({ id: 'todos::get-metrics' }, async () => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'todos::get-metrics',
-  config: { api_path: '/todos/metrics', http_method: 'GET' },
+  config: { api_path: 'todos/metrics', http_method: 'GET' },
 })

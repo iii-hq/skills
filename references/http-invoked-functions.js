@@ -189,7 +189,7 @@ iii.registerFunction({ id: 'integrations::hourly-heartbeat' }, async () => {
 iii.registerTrigger({
   type: 'cron',
   function_id: 'integrations::hourly-heartbeat',
-  config: { expression: '0 0 * * * * *' },
+  config: { cron: '0 0 * * * * *' },
 })
 
 // ---------------------------------------------------------------------------

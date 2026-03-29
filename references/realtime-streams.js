@@ -250,7 +250,7 @@ iii.registerFunction({ id: 'presence::leave' }, async (data) => {
 // ---------------------------------------------------------------------------
 // HTTP triggers
 // ---------------------------------------------------------------------------
-iii.registerTrigger({ type: 'http', function_id: 'chat::broadcast', config: { api_path: '/chat/send', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'chat::list-messages', config: { api_path: '/chat/:room/messages', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'presence::join', config: { api_path: '/presence/join', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'presence::leave', config: { api_path: '/presence/leave', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'chat::broadcast', config: { api_path: 'chat/send', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'chat::list-messages', config: { api_path: 'chat/:room/messages', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'presence::join', config: { api_path: 'presence/join', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'presence::leave', config: { api_path: 'presence/leave', http_method: 'POST' } })

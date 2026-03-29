@@ -125,8 +125,8 @@ iii.registerFunction({ id: 'users::delete' }, async (req) => {
 // ---------------------------------------------------------------------------
 // HTTP trigger registrations
 // ---------------------------------------------------------------------------
-iii.registerTrigger({ type: 'http', function_id: 'users::create', config: { api_path: '/users', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'users::get-by-id', config: { api_path: '/users/:id', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'users::list', config: { api_path: '/users', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'users::update', config: { api_path: '/users/:id', http_method: 'PUT' } })
-iii.registerTrigger({ type: 'http', function_id: 'users::delete', config: { api_path: '/users/:id', http_method: 'DELETE' } })
+iii.registerTrigger({ type: 'http', function_id: 'users::create', config: { api_path: 'users', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'users::get-by-id', config: { api_path: 'users/:id', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'users::list', config: { api_path: 'users', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'users::update', config: { api_path: 'users/:id', http_method: 'PUT' } })
+iii.registerTrigger({ type: 'http', function_id: 'users::delete', config: { api_path: 'users/:id', http_method: 'DELETE' } })

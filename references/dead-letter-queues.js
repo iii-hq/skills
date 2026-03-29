@@ -72,7 +72,7 @@ iii.registerFunction({ id: 'orders::submit-payment' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'orders::submit-payment',
-  config: { api_path: '/orders/pay', http_method: 'POST' },
+  config: { api_path: 'orders/pay', http_method: 'POST' },
 })
 
 // ---------------------------------------------------------------------------
@@ -96,7 +96,7 @@ iii.registerFunction({ id: 'admin::redrive-payments' }, async () => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'admin::redrive-payments',
-  config: { api_path: '/admin/redrive/payments', http_method: 'POST' },
+  config: { api_path: 'admin/redrive/payments', http_method: 'POST' },
 })
 
 // ---------------------------------------------------------------------------
@@ -131,7 +131,7 @@ iii.registerFunction({ id: 'admin::dlq-status' }, async () => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'admin::dlq-status',
-  config: { api_path: '/admin/dlq/status', http_method: 'GET' },
+  config: { api_path: 'admin/dlq/status', http_method: 'GET' },
 })
 
 // ---------------------------------------------------------------------------

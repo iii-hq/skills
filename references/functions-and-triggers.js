@@ -36,7 +36,7 @@ iii.registerFunction({ id: 'orders::validate' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'orders::validate',
-  config: { api_path: '/orders/validate', http_method: 'POST' },
+  config: { api_path: 'orders/validate', http_method: 'POST' },
 })
 
 // ---------------------------------------------------------------------------
@@ -136,7 +136,7 @@ iii.registerFunction({ id: 'orders::create' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'orders::create',
-  config: { api_path: '/orders', http_method: 'POST' },
+  config: { api_path: 'orders', http_method: 'POST' },
 })
 
 // ---------------------------------------------------------------------------
@@ -153,7 +153,7 @@ iii.registerFunction(
       timeout_ms: 10000,
       auth: {
         type: 'bearer',
-        token: process.env.STRIPE_API_KEY,
+        token_key: 'STRIPE_API_KEY',
       },
     },
   },

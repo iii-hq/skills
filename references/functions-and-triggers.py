@@ -158,7 +158,7 @@ iii.register_function({
         "timeout_ms": 10000,
         "auth": {
             "type": "bearer",
-            "token": os.environ.get("STRIPE_API_KEY", ""),
+            "token_key": "STRIPE_API_KEY",
         },
     },
 })

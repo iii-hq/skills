@@ -42,7 +42,9 @@ Use the concepts below when they fit the task. Not every stream setup needs all 
 
 ## Reference Implementation
 
-See [../references/realtime-streams.js](../references/realtime-streams.js) for the full working example — a stream that pushes live updates to WebSocket clients and manages stream items with CRUD operations.
+- **TypeScript**: [../references/realtime-streams.js](../references/realtime-streams.js)
+- **Python**: [../references/realtime-streams.py](../references/realtime-streams.py)
+- **Rust**: [../references/realtime-streams.rs](../references/realtime-streams.rs)
 
 ## Common Patterns
 
@@ -65,23 +67,8 @@ Use the adaptations below when they apply to the task.
 - Combine with `state-reactions` to push a stream event whenever state changes
 - Use `createStream` when the default adapter does not fit (e.g. custom persistence or fan-out logic)
 
-## Engine Configuration
-
-StreamModule must be enabled in iii-config.yaml with a port and adapter (KvStore or Redis). See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
-
 ## Pattern Boundaries
 
 - If the task is about persistent key-value data without real-time push, prefer `state-management`.
 - If the task needs reactive triggers on state changes (server-side), prefer `state-reactions`.
 - Stay with `realtime-streams` when the primary need is pushing live updates to connected clients.
-
-## When to Use
-
-- Use this skill when the task is primarily about `realtime-streams` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

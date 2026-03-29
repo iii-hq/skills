@@ -59,23 +59,24 @@ Supports 32+ agents including Claude Code, Cursor, Codex, Gemini CLI, OpenCode, 
 
 ### HOWTO Skills
 
-Direct mappings to [iii documentation](https://iii.dev/docs) HOWTOs. Each teaches one primitive or capability.
+Direct mappings to [iii documentation](https://iii.dev/docs) HOWTOs. Each teaches one primitive or capability. All HOWTO skills include working reference implementations in TypeScript, Python, and Rust.
 
-| Skill                                              | What it does                                                             |
-| -------------------------------------------------- | ------------------------------------------------------------------------ |
-| [functions-and-triggers](./functions-and-triggers) | Register functions and bind triggers across TypeScript, Python, and Rust |
-| [http-endpoints](./http-endpoints)                 | Expose functions as REST API endpoints                                   |
-| [cron-scheduling](./cron-scheduling)               | Schedule recurring tasks with cron expressions                           |
-| [queue-processing](./queue-processing)             | Async job processing with retries, concurrency, and ordering             |
-| [state-management](./state-management)             | Distributed key-value state across functions                             |
-| [state-reactions](./state-reactions)               | Auto-trigger functions on state changes                                  |
-| [realtime-streams](./realtime-streams)             | Push live updates to WebSocket clients                                   |
-| [custom-triggers](./custom-triggers)               | Build custom trigger types for external events                           |
-| [trigger-actions](./trigger-actions)               | Synchronous, fire-and-forget, and enqueue invocation modes               |
-| [trigger-conditions](./trigger-conditions)         | Gate trigger execution with condition functions                          |
-| [dead-letter-queues](./dead-letter-queues)         | Inspect and redrive failed queue jobs                                    |
-| [engine-config](./engine-config)                   | Configure the iii engine via iii-config.yaml                             |
-| [observability](./observability)                   | OpenTelemetry tracing, metrics, and logging                              |
+| Skill                                              | What it does                                                             | JS | Py | Rs |
+| -------------------------------------------------- | ------------------------------------------------------------------------ | -- | -- | -- |
+| [functions-and-triggers](./functions-and-triggers) | Register functions and bind triggers across TypeScript, Python, and Rust | ✓  | ✓  | ✓  |
+| [http-endpoints](./http-endpoints)                 | Expose functions as REST API endpoints                                   | ✓  | ✓  | ✓  |
+| [cron-scheduling](./cron-scheduling)               | Schedule recurring tasks with cron expressions                           | ✓  | ✓  | ✓  |
+| [queue-processing](./queue-processing)             | Async job processing with retries, concurrency, and ordering             | ✓  | ✓  | ✓  |
+| [state-management](./state-management)             | Distributed key-value state across functions                             | ✓  | ✓  | ✓  |
+| [state-reactions](./state-reactions)               | Auto-trigger functions on state changes                                  | ✓  | ✓  | ✓  |
+| [realtime-streams](./realtime-streams)             | Push live updates to WebSocket clients                                   | ✓  | ✓  | ✓  |
+| [custom-triggers](./custom-triggers)               | Build custom trigger types for external events                           | ✓  | ✓  |    |
+| [trigger-actions](./trigger-actions)               | Synchronous, fire-and-forget, and enqueue invocation modes               | ✓  | ✓  | ✓  |
+| [trigger-conditions](./trigger-conditions)         | Gate trigger execution with condition functions                          | ✓  | ✓  | ✓  |
+| [dead-letter-queues](./dead-letter-queues)         | Inspect and redrive failed queue jobs                                    | ✓  | ✓  | ✓  |
+| [engine-config](./engine-config)                   | Configure the iii engine via iii-config.yaml                             | ✓  |    |    |
+| [observability](./observability)                   | OpenTelemetry tracing, metrics, and logging                              | ✓  | ✓  | ✓  |
+| [channels](./channels)                             | Binary streaming between workers                                         | ✓  | ✓  | ✓  |
 
 ### Architecture Pattern Skills
 
@@ -111,12 +112,13 @@ Each skill follows the [Agent Skills specification](https://agentskills.io/speci
 
 ```text
 http-endpoints/
-└── SKILL.md    # YAML frontmatter (name + description) + markdown instructions
+└── SKILL.md                    # YAML frontmatter (name + description) + markdown instructions
 
 references/
-├── http-endpoints.js    # Full working code examples for each skill
-├── agentic-backend.js
-├── iii-config.yaml      # Shared engine config reference
+├── http-endpoints.js           # TypeScript reference implementation
+├── http-endpoints.py           # Python reference implementation
+├── http-endpoints.rs           # Rust reference implementation
+├── iii-config.yaml             # Shared engine config reference
 └── ...
 ```
 

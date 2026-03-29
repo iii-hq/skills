@@ -41,8 +41,9 @@ The worker SDK generates spans, metrics, and logs during function execution. The
 
 ## Reference Implementation
 
-See [../references/observability.js](../references/observability.js) for the full working example — a worker with custom spans,
-metrics counters, trace propagation, and log subscriptions connected to an OTel collector.
+- **TypeScript**: [../references/observability.js](../references/observability.js)
+- **Python**: [../references/observability.py](../references/observability.py)
+- **Rust**: [../references/observability.rs](../references/observability.rs)
 
 ## Common Patterns
 
@@ -68,23 +69,8 @@ Use the adaptations below when they apply to the task.
 - Configure `OtelModule` in iii-config.yaml for engine-side exporter, sampling ratio, and alerts
 - Point the OTLP endpoint at your collector (Jaeger, Grafana Tempo, Datadog Agent)
 
-## Engine Configuration
-
-OtelModule must be enabled in iii-config.yaml for engine-side traces, metrics, and logs. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
-
 ## Pattern Boundaries
 
 - For engine-side OtelModule YAML configuration, prefer `engine-config`.
 - For SDK init options and function registration, prefer `functions-and-triggers`.
 - Stay with `observability` when the primary problem is SDK-level telemetry: spans, metrics, logs, and trace propagation.
-
-## When to Use
-
-- Use this skill when the task is primarily about `observability` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

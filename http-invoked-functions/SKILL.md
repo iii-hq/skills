@@ -40,17 +40,8 @@ Use this pattern when iii should call external HTTP endpoints as functions.
 - Do not pass raw secrets in auth fields; pass env var names.
 - Keep function IDs stable and domain-prefixed (for example `legacy::orders`).
 
-## Reference
+## Reference Implementation
 
-See [../references/http-invoked-functions.js](../references/http-invoked-functions.js).
-
-## When to Use
-
-- Use this skill when the task is primarily about `http-invoked-functions` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.
+- **TypeScript**: [../references/http-invoked-functions.js](../references/http-invoked-functions.js)
+- **Python**: [../references/http-invoked-functions.py](../references/http-invoked-functions.py)
+- **Rust**: [../references/http-invoked-functions.rs](../references/http-invoked-functions.rs)

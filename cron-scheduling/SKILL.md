@@ -35,11 +35,13 @@ Use the concepts below when they fit the task. Not every scheduled job needs all
 | ----------------------------------------- | ---------------------------------------- |
 | `registerFunction`                        | Define the handler for the scheduled job |
 | `registerTrigger({ type: 'cron' })`       | Bind a cron expression to a function     |
-| `config: { expression: '0 0 9 * * * *' }` | Cron schedule in 7-field format          |
+| `config: { cron: '0 0 9 * * * *' }` | Cron schedule in 7-field format          |
 
 ## Reference Implementation
 
-See [../references/cron-scheduling.js](../references/cron-scheduling.js) for the full working example — a recurring scheduled task that fires on a cron expression and optionally enqueues heavy work.
+- **TypeScript**: [../references/cron-scheduling.js](../references/cron-scheduling.js)
+- **Python**: [../references/cron-scheduling.py](../references/cron-scheduling.py)
+- **Rust**: [../references/cron-scheduling.rs](../references/cron-scheduling.rs)
 
 ## Common Patterns
 
@@ -47,7 +49,7 @@ Code using this pattern commonly includes, when relevant:
 
 - `registerWorker(url, { workerName })` — worker initialization
 - `registerFunction(id, handler)` — define the scheduled handler
-- `registerTrigger({ type: 'cron', config: { expression } })` — bind the schedule
+- `registerTrigger({ type: 'cron', config: { cron } })` — bind the schedule
 - `trigger({ function_id, payload, action: TriggerAction.Enqueue({ queue }) })` — offload heavy work
 - `const logger = new Logger()` — structured logging per job
 
@@ -60,23 +62,8 @@ Use the adaptations below when they apply to the task.
 - For jobs that need state (e.g. last-run timestamp), combine with `state-management`
 - Multiple cron triggers can feed the same queue for fan-in processing
 
-## Engine Configuration
-
-CronModule must be enabled in iii-config.yaml. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
-
 ## Pattern Boundaries
 
 - If the task is about one-off async work rather than recurring schedules, prefer `queue-processing`.
 - If the trigger should fire on state changes rather than time, prefer `state-reactions`.
 - Stay with `cron-scheduling` when the primary need is time-based periodic execution.
-
-## When to Use
-
-- Use this skill when the task is primarily about `cron-scheduling` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

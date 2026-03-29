@@ -42,7 +42,9 @@ Use the concepts below when they fit the task. Not every queue setup needs all o
 
 ## Reference Implementation
 
-See [../references/queue-processing.js](../references/queue-processing.js) for the full working example — a producer that enqueues jobs and a consumer that processes them with retry logic.
+- **TypeScript**: [../references/queue-processing.js](../references/queue-processing.js)
+- **Python**: [../references/queue-processing.py](../references/queue-processing.py)
+- **Rust**: [../references/queue-processing.rs](../references/queue-processing.rs)
 
 ## Common Patterns
 
@@ -64,24 +66,9 @@ Use the adaptations below when they apply to the task.
 - Chain multiple queues for multi-stage pipelines (queue A consumer enqueues to queue B)
 - For idempotency, check state before processing to avoid duplicate work on retries
 
-## Engine Configuration
-
-Named queues are declared in iii-config.yaml under `queue_configs` with per-queue `max_retries`, `concurrency`, `type`, and `backoff_ms`. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
-
 ## Pattern Boundaries
 
 - If the task only needs fire-and-forget without retries or ordering, prefer `trigger-actions` with `TriggerAction.Void()`.
 - If failed jobs need special handling or alerting, prefer `dead-letter-queues` for the DLQ consumer.
 - If the task is step-by-step orchestration with branching, prefer `workflow-orchestration`.
 - Stay with `queue-processing` when the primary need is reliable async job execution with retries.
-
-## When to Use
-
-- Use this skill when the task is primarily about `queue-processing` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

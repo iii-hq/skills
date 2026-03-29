@@ -36,8 +36,9 @@ When a trigger fires, the engine first invokes the condition function with the e
 
 ## Reference Implementation
 
-See [../references/trigger-conditions.js](../references/trigger-conditions.js) for the full working example — a condition-gated trigger
-where a business rule function filters events before the handler processes them.
+- **TypeScript**: [../references/trigger-conditions.js](../references/trigger-conditions.js)
+- **Python**: [../references/trigger-conditions.py](../references/trigger-conditions.py)
+- **Rust**: [../references/trigger-conditions.rs](../references/trigger-conditions.rs)
 
 ## Common Patterns
 
@@ -66,14 +67,3 @@ Use the adaptations below when they apply to the task.
 - For state change triggers specifically, prefer `state-reactions`.
 - For invocation modes (sync/void/enqueue), prefer `trigger-actions`.
 - Stay with `trigger-conditions` when the primary problem is gating trigger execution with a condition check.
-
-## When to Use
-
-- Use this skill when the task is primarily about `trigger-conditions` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

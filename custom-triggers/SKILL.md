@@ -38,7 +38,8 @@ Use the concepts below when they fit the task. Not every custom trigger needs al
 
 ## Reference Implementation
 
-See [../references/custom-triggers.js](../references/custom-triggers.js) for the full working example — a custom trigger type that listens for external events and routes them to registered functions.
+- **TypeScript**: [../references/custom-triggers.js](../references/custom-triggers.js)
+- **Python**: [../references/custom-triggers.py](../references/custom-triggers.py)
 
 ## Common Patterns
 
@@ -68,14 +69,3 @@ Use the adaptations below when they apply to the task.
 - If the task uses built-in cron schedules, prefer `cron-scheduling`.
 - If the task uses built-in queue triggers, prefer `queue-processing`.
 - Stay with `custom-triggers` when iii has no built-in trigger type for the event source.
-
-## When to Use
-
-- Use this skill when the task is primarily about `custom-triggers` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

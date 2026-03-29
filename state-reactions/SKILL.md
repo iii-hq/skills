@@ -41,7 +41,9 @@ Use the concepts below when they fit the task. Not every state reaction needs al
 
 ## Reference Implementation
 
-See [../references/state-reactions.js](../references/state-reactions.js) for the full working example — a reaction that watches a state scope and fires side effects when values change, with an optional condition gate.
+- **TypeScript**: [../references/state-reactions.js](../references/state-reactions.js)
+- **Python**: [../references/state-reactions.py](../references/state-reactions.py)
+- **Rust**: [../references/state-reactions.rs](../references/state-reactions.rs)
 
 ## Common Patterns
 
@@ -64,23 +66,8 @@ Use the adaptations below when they apply to the task.
 - Add a `condition_function_id` to filter — only react when the condition function returns truthy
 - Chain reactions by writing state in one handler that triggers another reaction on a different scope
 
-## Engine Configuration
-
-StateModule must be enabled in iii-config.yaml for state triggers to fire. See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
-
 ## Pattern Boundaries
 
 - If the task is about directly reading or writing state without reactions, prefer `state-management`.
 - If the task needs conditional trigger logic shared across trigger types, prefer `trigger-conditions`.
 - Stay with `state-reactions` when the primary need is automatic side effects on state changes.
-
-## When to Use
-
-- Use this skill when the task is primarily about `state-reactions` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

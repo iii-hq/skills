@@ -177,5 +177,5 @@ iii.registerFunction({ id: 'agents::start-research' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'agents::start-research',
-  config: { api_path: '/agents/research', http_method: 'POST' },
+  config: { api_path: 'agents/research', http_method: 'POST' },
 })

@@ -53,7 +53,7 @@ iii.registerFunction({ id: 'cron::hourly-cleanup' }, async () => {
 iii.registerTrigger({
   type: 'cron',
   function_id: 'cron::hourly-cleanup',
-  config: { expression: '0 0 * * * * *' },
+  config: { cron: '0 0 * * * * *' },
 })
 
 // ---------------------------------------------------------------------------
@@ -98,7 +98,7 @@ iii.registerFunction({ id: 'cron::daily-report' }, async () => {
 iii.registerTrigger({
   type: 'cron',
   function_id: 'cron::daily-report',
-  config: { expression: '0 0 0 * * * *' },
+  config: { cron: '0 0 0 * * * *' },
 })
 
 // ---------------------------------------------------------------------------
@@ -144,7 +144,7 @@ iii.registerFunction({ id: 'cron::health-check' }, async () => {
 iii.registerTrigger({
   type: 'cron',
   function_id: 'cron::health-check',
-  config: { expression: '0 */5 * * * * *' },
+  config: { cron: '0 */5 * * * * *' },
 })
 
 // ---------------------------------------------------------------------------

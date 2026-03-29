@@ -89,5 +89,5 @@ iii.registerFunction({ id: 'pipeline::consume' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'pipeline::produce',
-  config: { api_path: '/pipeline/start', http_method: 'POST' },
+  config: { api_path: 'pipeline/start', http_method: 'POST' },
 })

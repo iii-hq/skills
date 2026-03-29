@@ -185,7 +185,7 @@ iii.registerFunction({ id: 'orders::cleanup-stale' }, async () => {
 iii.registerTrigger({
   type: 'cron',
   function_id: 'orders::cleanup-stale',
-  config: { expression: '0 0 * * * * *' }, // every hour
+  config: { cron: '0 0 * * * * *' }, // every hour
 })
 
 // ---------------------------------------------------------------------------
@@ -228,5 +228,5 @@ iii.registerFunction({ id: 'orders::create' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'orders::create',
-  config: { api_path: '/orders', http_method: 'POST' },
+  config: { api_path: 'orders', http_method: 'POST' },
 })

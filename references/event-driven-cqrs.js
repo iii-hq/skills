@@ -82,8 +82,8 @@ iii.registerFunction({ id: 'cmd::sell-item' }, async (data) => {
 })
 
 // HTTP command endpoints
-iii.registerTrigger({ type: 'http', function_id: 'cmd::add-inventory-item', config: { api_path: '/inventory/add', http_method: 'POST' } })
-iii.registerTrigger({ type: 'http', function_id: 'cmd::sell-item', config: { api_path: '/inventory/sell', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'cmd::add-inventory-item', config: { api_path: 'inventory/add', http_method: 'POST' } })
+iii.registerTrigger({ type: 'http', function_id: 'cmd::sell-item', config: { api_path: 'inventory/sell', http_method: 'POST' } })
 
 // ===================================================================
 // EVENT LOG — append-only event store (event sourcing)
@@ -198,6 +198,6 @@ iii.registerFunction({ id: 'query::event-history' }, async (data) => {
   return log?.events || []
 })
 
-iii.registerTrigger({ type: 'http', function_id: 'query::catalog', config: { api_path: '/inventory', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'query::sales-analytics', config: { api_path: '/inventory/analytics', http_method: 'GET' } })
-iii.registerTrigger({ type: 'http', function_id: 'query::event-history', config: { api_path: '/inventory/history', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'query::catalog', config: { api_path: 'inventory', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'query::sales-analytics', config: { api_path: 'inventory/analytics', http_method: 'GET' } })
+iii.registerTrigger({ type: 'http', function_id: 'query::event-history', config: { api_path: 'inventory/history', http_method: 'GET' } })

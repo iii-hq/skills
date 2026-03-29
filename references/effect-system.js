@@ -120,7 +120,7 @@ iii.registerFunction({ id: 'fx::register-user-pipeline' }, async (rawInput) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'fx::register-user-pipeline',
-  config: { api_path: '/users/register', http_method: 'POST' },
+  config: { api_path: 'users/register', http_method: 'POST' },
 })
 
 // ---------------------------------------------------------------------------
@@ -150,5 +150,5 @@ iii.registerFunction({ id: 'fx::import-users-batch' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'fx::import-users-batch',
-  config: { api_path: '/users/import', http_method: 'POST' },
+  config: { api_path: 'users/import', http_method: 'POST' },
 })

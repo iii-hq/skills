@@ -76,7 +76,7 @@ iii.registerTrigger({
   type: 'http',
   function_id: 'api::protected-endpoint',
   config: {
-    api_path: '/api/protected',
+    api_path: 'api/protected',
     http_method: 'GET',
     condition_function_id: 'conditions::has-api-key',
   },

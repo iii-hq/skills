@@ -45,7 +45,9 @@ Use the concepts below when they fit the task. Not every state operation needs a
 
 ## Reference Implementation
 
-See [../references/state-management.js](../references/state-management.js) for the full working example — functions that read, write, update, and delete state entries across a shared scope.
+- **TypeScript**: [../references/state-management.js](../references/state-management.js)
+- **Python**: [../references/state-management.py](../references/state-management.py)
+- **Rust**: [../references/state-management.rs](../references/state-management.rs)
 
 ## Common Patterns
 
@@ -68,23 +70,8 @@ Use the adaptations below when they apply to the task.
 - Use `state::update` with `ops` for partial updates instead of read-modify-write cycles
 - Combine with `queue-processing` to persist results after async job completion
 
-## Engine Configuration
-
-StateModule must be enabled in iii-config.yaml with a KvStore adapter (file-based or Redis). See [../references/iii-config.yaml](../references/iii-config.yaml) for the full annotated config reference.
-
 ## Pattern Boundaries
 
 - If the task needs reactive side effects when state changes, prefer `state-reactions`.
 - If the task needs real-time client push when data updates, prefer `realtime-streams`.
 - Stay with `state-management` when the primary need is reading and writing persistent key-value data.
-
-## When to Use
-
-- Use this skill when the task is primarily about `state-management` in the iii engine.
-- Triggers when the request directly asks for this pattern or an equivalent implementation.
-
-## Boundaries
-
-- Never use this skill as a generic fallback for unrelated tasks.
-- You must not apply this skill when a more specific iii skill is a better fit.
-- Always verify environment and safety constraints before applying examples from this skill.

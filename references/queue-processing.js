@@ -203,5 +203,5 @@ iii.registerFunction({ id: 'orders::place' }, async (data) => {
 iii.registerTrigger({
   type: 'http',
   function_id: 'orders::place',
-  config: { api_path: '/orders', http_method: 'POST' },
+  config: { api_path: 'orders', http_method: 'POST' },
 })

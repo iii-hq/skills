@@ -108,7 +108,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 // Listen for text messages
                 reader
                     .on_message(|msg| {
-                        println!("Metadata: {}", msg);
+                        // Process metadata message
                     })
                     .await;
 
